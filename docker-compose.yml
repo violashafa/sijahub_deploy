@@ -2,14 +2,15 @@ version: '3.8'
 
 services:
   sijahub-web:
-    image: nginx:alpine
-    container_name: sijahub-frontend
-    ports:
-      - "8443:80"
-    volumes:
-      # Mount folder frontend UTAMA, bukan cuma pages
-      - ./sija_connect/frontend:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      image: nginx:alpine
+      container_name: sijahub-frontend
+      ports:
+        - "8443:80"
+      volumes:
+        - ./sija_connect/frontend:/usr/share/nginx/html
+        - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      depends_on:
+        - sijahub-backend
 
   sijahub-backend:  # <--- Pastikan ini sejajar dengan sijahub-web
     build: ./sija_connect
