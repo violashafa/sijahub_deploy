@@ -16,7 +16,7 @@ services:
     container_name: sijahub-api
     restart: always
     environment:
-      - MONGO_URI=mongodb+srv://violashafa:viola123@cluster0.mongodb.net/sijahub_db
+      - MONGO_URI=mongodb+srv://violashafa:viola123@cluster0.lyvx0c2.mongodb.net/sijahub_db?retryWrites=true&w=majority
       - PORT=5000
     depends_on:
       - mongo-db

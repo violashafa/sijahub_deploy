@@ -2,65 +2,83 @@ function updateNavbarByRole() {
     let rawRole = localStorage.getItem("userRole");
     const role = rawRole ? rawRole.trim().toLowerCase() : 'guest'; 
     const userName = localStorage.getItem("userName") || "User";
-    
-    // AMBIL URL LANGSUNG DARI CLOUDINARY (yang disimpan di localStorage)
-    // Jika tidak ada, pakai foto default dari UI Avatar agar tetap online/cloud-based
     const userAvatar = localStorage.getItem("userAvatar") || `https://ui-avatars.com/api/?name=${userName}&background=random`; 
 
     const menuNav = document.getElementById('navMenu');
-    
     if (!menuNav) return;
-    menuNav.innerHTML = ""; 
 
-    // Template Badge dengan Foto Profil Cloudinary
-    const profileSection = `
-        <a href="profile.html" style="text-decoration:none; display:flex; align-items:center; gap:10px;">
-            <div class="profile-pic-container" style="width:35px; height:35px; border-radius:50%; overflow:hidden; border:2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+    const profileSection = (role !== 'guest') ? `
+        <a href="profile.html" class="profile-link" style="display:flex; align-items:center; gap:10px;">
+            <div style="width:32px; height:32px; border-radius:50%; overflow:hidden; border:2px solid #fff; flex-shrink:0;">
                 <img src="${userAvatar}" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <span class="user-badge ${role === 'admin' ? 'admin-badge' : 'user-info-badge'}">
-                ${role.toUpperCase()} - ${userName.toUpperCase()}
-            </span>
+            <div style="display:flex; flex-direction:column; line-height:1.1;">
+                <span style="font-size:12px; color:white; font-weight:bold;">${userName.toUpperCase()}</span>
+                <span class="user-badge ${role === 'admin' ? 'admin-badge' : 'user-info-badge'}" style="font-size:9px;">${role.toUpperCase()}</span>
+            </div>
         </a>
+    ` : "";
+
+    let menuItems = "";
+
+    // Menu Item Dasar (Common)
+    const baseMenu = `
+        <a href="index.html">Beranda</a>
+        <a href="${role === 'admin' ? 'daftar_siswa.html' : 'view_daftarsiswa.html'}">Daftar Siswa</a>
+        <a href="${role === 'admin' ? 'prestasi.html' : 'view_prestasi.html'}">Prestasi</a>
+        <a href="${role === 'admin' ? 'info_lomba.html' : 'view_infolomba.html'}">Info Lomba</a>
+        <a href="${role === 'admin' ? 'info_loker.html' : 'view_infoloker.html'}">Info Loker</a>
     `;
 
-    if (role === 'admin') {
-        menuNav.innerHTML = `
-            <a href="index.html">Beranda</a>
-            <a href="daftar_siswa.html">Kelola Siswa</a>
-            <a href="prestasi.html">Kelola Prestasi</a>
-            <a href="info_lomba.html">Kelola Lomba</a>
-            <a href="info_loker.html">Kelola Loker</a>
-            ${profileSection}
-            <a href="javascript:void(0)" onclick="logout()" class="logout-btn">LOGOUT</a>
-        `;
-    } else if (role === 'user') {
-        menuNav.innerHTML = `
-            <a href="index.html">Beranda</a>
-            <a href="view_daftarsiswa.html">Daftar Siswa</a>
-            <a href="view_prestasi.html">Prestasi</a>
-            <a href="view_infolomba.html">Info Lomba</a>
-            <a href="view_infoloker.html">Info Loker</a>
-            ${profileSection}
-            <a href="javascript:void(0)" onclick="logout()" class="logout-btn">LOGOUT</a>
+    if (role === 'guest') {
+        menuItems = `
+            ${baseMenu}
+            <a href="login.html" style="background:white; color:#138496 !important; font-weight:bold; text-align:center;">Login</a>
         `;
     } else {
-        menuNav.innerHTML = `
-            <a href="index.html">Beranda</a>
-            <a href="view_daftarsiswa.html">Daftar Siswa</a>
-            <a href="view_prestasi.html">Prestasi</a>
-            <a href="view_infolomba.html">Info Lomba</a>
-            <a href="view_infoloker.html">Info Loker</a>
-            <span class="user-badge guest-badge">GUEST</span>
-            <a href="login.html" class="login-btn">Login</a>
+        // Gabungkan: Menu Utama + Profil + Logout
+        menuItems = `
+            ${baseMenu}
+            ${profileSection}
+            <a href="javascript:void(0)" onclick="logout()" class="logout-btn">LOGOUT</a>
         `;
     }
+
+    menuNav.innerHTML = menuItems;
     setActiveMenu();
+    initMobileMenu();
 }
 
-// Bagian logout & active menu tetap sama (tidak diubah)
+function initMobileMenu() {
+    const hamburger = document.getElementById('hamburgerBtn');
+    const menu = document.getElementById('navMenu');
+    const overlay = document.getElementById('headerOverlay');
+    const links = document.querySelectorAll('.menu a');
+
+    hamburger.onclick = (e) => {
+        e.stopPropagation();
+        hamburger.classList.toggle('open');
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    };
+
+    overlay.onclick = () => {
+        hamburger.classList.remove('open');
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+    };
+
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    });
+}
+
 function logout() {
-    if (confirm("Halo " + (localStorage.getItem("userName") || "Admin") + ", yakin ingin logout?")) {
+    if (confirm("Halo, yakin ingin logout?")) {
         localStorage.clear();
         window.location.href = "index.html";
     }
@@ -73,24 +91,9 @@ function setActiveMenu() {
         const href = link.getAttribute('href');
         if (currentPage === href || (currentPage === "" && href === "index.html")) {
             link.classList.add('active');
-        } else {
-            link.classList.remove('active');
         }
     });
 }
-
-// Auto-hide scroll tetap sama
-let lastScrollTop = 0;
-window.addEventListener('scroll', function() {
-    const navbar = document.querySelector('.navbar'); 
-    if (!navbar) return;
-    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop > 80) {
-        if (scrollTop > lastScrollTop) navbar.classList.add('hidden');
-        else navbar.classList.remove('hidden');
-    } else navbar.classList.remove('hidden');
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-});
 
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(updateNavbarByRole, 100);
