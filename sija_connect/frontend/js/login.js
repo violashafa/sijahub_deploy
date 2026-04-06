@@ -23,7 +23,7 @@ function showLogin() {
 }
 
 /* INTEGRASI BACKEND */
-const API_URL = "https://localhost:5000/api/auth"; 
+const API_URL = "/api/auth"; 
 
 async function handleLogin() {
     const email = document.getElementById("login-email").value;
