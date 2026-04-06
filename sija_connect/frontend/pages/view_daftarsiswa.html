@@ -84,6 +84,17 @@
         #pagination { display: flex; justify-content: center; gap: 8px; margin: 40px 0; }
         .pagination-btn { padding: 10px 18px; border-radius: 10px; border: none; background: #eee; color: #333; cursor: pointer; font-weight: 600; }
         .pagination-btn.active { background: var(--primary); color: #fff; }
+
+        /* PAKSA teks detail popup selalu hitam, tidak peduli CSS lain */
+        #detailPopup #extraInfo p,
+        #detailPopup #extraInfo p b,
+        #detailPopup #extraInfo p span.info-value {
+            color: #000000 !important;
+        }
+        /* Khusus link Instagram tetap warna cyan */
+        #detailPopup #extraInfo p a {
+            color: var(--primary) !important;
+        }
     </style>
 </head>
 <body>
@@ -241,13 +252,13 @@
             document.getElementById('popupFoto').src = fotoUrl;
             document.getElementById('popupNama').innerText = s.namaLengkap;
             document.getElementById('extraInfo').innerHTML = `
-                <p><b>Status:</b> ${s.status === 'alumni' ? 'Alumni' : 'Siswa Aktif'}</p>
-                <p><b>Kelas:</b> ${s.kelas}</p>
-                <p><b>Angkatan:</b> ${s.angkatan}</p>
-                ${s.status === 'alumni' ? `<p><b>Tahun Lulus:</b> ${s.tahunLulus || '-'}</p>` : ''}
-                <p><b>Aktivitas:</b> ${s.aktivitas || '-'}</p>
-                <p><b>Instansi:</b> ${s.instansi || '-'}</p>
-                <p><b>Instagram:</b> ${s.mediaSosial?.instagram ? '<a href="https://instagram.com/'+s.mediaSosial.instagram+'" target="_blank" style="color:var(--primary); text-decoration:none;">@' + s.mediaSosial.instagram + '</a>' : '-'}</p>
+                <p><b>Status:</b> <span class="info-value">${s.status === 'alumni' ? 'Alumni' : 'Siswa Aktif'}</span></p>
+                <p><b>Kelas:</b> <span class="info-value">${s.kelas}</span></p>
+                <p><b>Angkatan:</b> <span class="info-value">${s.angkatan}</span></p>
+                ${s.status === 'alumni' ? `<p><b>Tahun Lulus:</b> <span class="info-value">${s.tahunLulus || '-'}</span></p>` : ''}
+                <p><b>Aktivitas:</b> <span class="info-value">${s.aktivitas || '-'}</span></p>
+                <p><b>Instansi:</b> <span class="info-value">${s.instansi || '-'}</span></p>
+                <p><b>Instagram:</b> ${s.mediaSosial?.instagram ? '<a href="https://instagram.com/'+s.mediaSosial.instagram+'" target="_blank" style="color:var(--primary); text-decoration:none;">@' + s.mediaSosial.instagram + '</a>' : '<span class="info-value">-</span>'}</p>
             `;
             document.getElementById('detailPopup').style.display = 'flex';
         }
