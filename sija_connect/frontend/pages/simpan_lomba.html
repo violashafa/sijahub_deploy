@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lomba Tersimpan - SijaHub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+    <style>
+        :root {
+            --primary: #0aa3b5;
+            --primary-dark: #088e9d;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.05);
+            --radius-lg: 24px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: 60px 24px; min-height: 80vh; }
+
+        .page-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 48px; flex-wrap: wrap; gap: 24px; 
+        }
+        .page-header h1 { font-size: 36px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -1px; }
+
+        .btn-back { 
+            background: white; color: var(--text-dark); border: 1px solid #e2e8f0; padding: 12px 20px; 
+            border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: 0.3s; text-decoration: none; font-size: 14px;
+        }
+        .btn-back:hover { background: #f1f5f9; transform: translateX(-5px); }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 32px; }
+
+        .lomba-card { 
+            background: var(--white); border-radius: var(--radius-lg); overflow: hidden;
+            box-shadow: var(--shadow-md); transition: 0.3s; 
+            position: relative; border: 1px solid #f1f5f9; display: flex; flex-direction: column;
+        }
+        .lomba-card:hover { transform: translateY(-10px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1); }
+
+        .poster-container { width: 100%; height: 200px; overflow: hidden; position: relative; }
+        .poster-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        .saved-badge {
+            position: absolute; top: 15px; left: 15px; background: #10b981;
+            color: white; padding: 6px 14px; border-radius: 10px; font-size: 11px; font-weight: 800;
+            display: flex; align-items: center; gap: 4px; z-index: 2;
+        }
+
+        .lomba-content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+        .lomba-content h3 { font-size: 20px; font-weight: 700; margin: 0 0 10px 0; color: var(--text-dark); }
+        .lomba-content .desc { color: var(--text-light); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+
+        .card-footer { display: flex; gap: 10px; border-top: 1px dashed #e2e8f0; padding-top: 20px; margin-top: auto; }
+        
+        .btn-detail { 
+            flex: 2; background: var(--primary); color: white; border: none; padding: 12px; 
+            border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s;
+        }
+        .btn-remove { 
+            flex: 1; background: #fee2e2; color: #ef4444; border: none; padding: 12px; 
+            border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-remove:hover { background: #fecaca; }
+
+        .popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; }
+        .popup-content { background: white; border-radius: 24px; padding: 35px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .close { position: absolute; top: 20px; right: 20px; cursor: pointer; color: #94a3b8; }
+
+        .empty-state { 
+            grid-column: 1 / -1; text-align: center; padding: 80px 20px; 
+            background: white; border-radius: 24px; border: 2px dashed #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>Koleksi Simpanan</h1>
+                <p style="color: #64748b; margin-top: 8px;">Daftar kompetisi yang telah Anda tandai sebelumnya.</p>
+            </div>
+            <a href="view_infolomba.html" class="btn-back">
+                <span class="material-symbols-rounded">arrow_back</span> Kembali ke Info Lomba
+            </a>
+        </div>
+
+        <div id="savedLombaGrid" class="card-grid"></div>
+    </div>
+
+    <div id="detailPopup" class="popup">
+        <div class="popup-content">
+            <span class="close material-symbols-rounded" onclick="closePopup()">close</span>
+            <div id="detailBody"></div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        const API_URL = 'https://localhost:5000/api/competitions';
+        let savedData = [];
+        const token = localStorage.getItem('token');
+
+        // Proteksi halaman
+        if (!token) {
+            alert("Silakan login terlebih dahulu!");
+            window.location.href = "login.html"; 
+        }
+
+        async function init() {
+            try {
+                const resH = await fetch('../components/header.html');
+                const resF = await fetch('../components/footer.html');
+                if(resH.ok) document.getElementById('header').innerHTML = await resH.text();
+                if(resF.ok) document.getElementById('footer').innerHTML = await resF.text();
+                
+                if (typeof updateNavbarByRole === "function") updateNavbarByRole();
+                await loadSavedLomba();
+            } catch (e) { console.error("Init error:", e); }
+        }
+
+        async function loadSavedLomba() {
+            try {
+                // KIRIM TOKEN AGAR BACKEND TAHU SIAPA ANDA
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    // Filter: Hanya ambil yang isSaved === true
+                    savedData = result.data.filter(item => item.isSaved === true);
+                    renderSavedLomba();
+                }
+            } catch (error) { 
+                console.error("Gagal load data:", error); 
+            }
+        }
+
+        function renderSavedLomba() {
+            const grid = document.getElementById('savedLombaGrid');
+            grid.innerHTML = '';
+
+            if (savedData.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-rounded" style="color:#cbd5e1; font-size:80px;">bookmark_border</span>
+                        <h2 style="color:#475569;">Belum ada lomba yang disimpan</h2>
+                        <p style="color:#94a3b8;">Jelajahi info lomba dan simpan kompetisi yang menarik minatmu.</p>
+                        <button class="btn-detail" style="max-width:250px; margin:25px auto; padding: 15px;" onclick="window.location.href='view_infolomba.html'">Cari Lomba Sekarang</button>
+                    </div>`;
+                return;
+            }
+
+            savedData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'lomba-card';
+                card.innerHTML = `
+                    <div class="poster-container">
+                        <div class="saved-badge">
+                            <span class="material-symbols-rounded" style="font-size:14px;">check_circle</span> Tersimpan
+                        </div>
+                        <img src="${item.poster || 'https://via.placeholder.com/400x200'}" onerror="this.src='https://via.placeholder.com/400x200'">
+                    </div>
+                    <div class="lomba-content">
+                        <h3>${item.judul}</h3>
+                        <p class="desc">${item.deskripsiSingkat || 'Klik detail untuk melihat info selengkapnya.'}</p>
+                        <div class="card-footer">
+                            <button class="btn-detail" onclick="showDetail('${item._id}')">Detail Lomba</button>
+                            <button class="btn-remove" onclick="unSave('${item._id}')" title="Hapus dari simpanan">
+                                <span class="material-symbols-rounded">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function unSave(id) {
+            if(confirm('Hapus dari koleksi simpanan?')) {
+                try {
+                    const res = await fetch(`${API_URL}/${id}/save`, { 
+                        method: 'PATCH',
+                        headers: { 
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if(res.ok) {
+                        await loadSavedLomba(); 
+                    }
+                } catch(e) { console.error("Gagal unsave:", e); }
+            }
+        }
+
+        function showDetail(id) {
+            const j = savedData.find(x => x._id === id);
+            if(!j) return;
+            document.getElementById('detailBody').innerHTML = `
+                <div style="display:flex; gap:25px; margin-bottom:30px; flex-wrap:wrap;">
+                    <img src="${j.poster || 'https://via.placeholder.com/400'}" style="width:250px; border-radius:15px; object-fit:cover; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <div style="flex:1; min-width:250px;">
+                        <h2 style="margin:0; font-size:28px; color:var(--primary); font-weight:800;">${j.judul}</h2>
+                        <p style="color:#64748b; font-weight:600; margin:10px 0;">Penyelenggara: ${j.penyelenggara || '-'}</p>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px; background:#f8fafc; padding:20px; border-radius:15px;">
+                            <div><small style="color:#94a3b8; font-weight:700; font-size:10px;">PESERTA</small><p style="margin:4px 0; font-weight:700;">${j.kategoriPeserta ? j.kategoriPeserta.join(', ') : 'Umum'}</p></div>
+                            <div><small style="color:#94a3b8; font-weight:700; font-size:10px;">BIAYA</small><p style="margin:4px 0; font-weight:700; color:#10b981;">${j.biaya == 0 ? 'Gratis' : 'Rp '+j.biaya.toLocaleString()}</p></div>
+                            <div><small style="color:#94a3b8; font-weight:700; font-size:10px;">TEMPAT</small><p style="margin:4px 0; font-weight:700;">${j.tempat || 'Online'}</p></div>
+                            <div><small style="color:#94a3b8; font-weight:700; font-size:10px;">DEADLINE</small><p style="margin:4px 0; font-weight:700; color:#ef4444;">${j.tanggalSelesai ? new Date(j.tanggalSelesai).toLocaleDateString('id-ID') : '-'}</p></div>
+                        </div>
+                        <button class="btn-detail" style="width:100%; margin-top:20px; padding:15px;" onclick="window.open('${j.linkDaftar}', '_blank')">Daftar Sekarang</button>
+                    </div>
+                </div>
+                <div style="border-top:1px solid #eee; padding-top:20px;">
+                    <h4 style="margin:0 0 12px 0;">Deskripsi Lengkap</h4>
+                    <p style="white-space:pre-wrap; color:#475569; line-height:1.7;">${j.deskripsiLengkap || 'Tidak ada deskripsi detail.'}</p>
+                </div>
+            `;
+            document.getElementById('detailPopup').style.display = 'flex';
+        }
+
+        function closePopup() { document.getElementById('detailPopup').style.display = 'none'; }
+        window.onclick = (e) => { if (e.target.classList.contains('popup')) closePopup(); }
+
+        init();
+    </script>
+    <script src="../js/header.js"></script>
+</body>
+</html>

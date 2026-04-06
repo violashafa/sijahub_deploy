@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SijaHub  | Login</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+
+<div class="background-animation">
+    <img src="../assets/Welcome To SiConnect.gif" class="bg-gif">
+</div>
+
+<div class="wrapper">
+    <nav class="nav">
+        <div class="nav-logo"><p>SijaHub</p></div>
+        <div class="nav-menu" id="navMenu">
+        </div>
+        <div class="nav-button">
+            <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
+            <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
+        </div>
+    </nav>
+
+    <div class="form-box glass-box">
+        <div class="login-container" id="login">
+            <header>Login</header>
+            <p id="error-msg" style="color: #ff6b6b; text-align: center; font-size: 13px; margin-bottom: 10px;"></p>
+            <div class="input-box">
+                <input type="text" id="login-email" class="input-field" placeholder="Email">
+                <i class="bx bx-user"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" id="login-password" class="input-field" placeholder="Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <button type="button" class="submit" onclick="handleLogin()">Sign In</button>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <p style="color: white; font-size: 12px; margin-bottom: 5px;">Atau masuk tanpa akun?</p>
+                <a href="javascript:void(0)" onclick="loginAsGuest()" style="color: #0aa3b5; font-weight: bold; text-decoration: none; font-size: 14px;">Masuk sebagai Tamu</a>
+            </div>
+        </div>
+
+        <div class="register-container" id="register">
+            <header>Sign Up</header>
+            <div class="two-forms">
+                <div class="input-box">
+                    <input type="text" id="reg-firstname" class="input-field" placeholder="Firstname">
+                    <i class="bx bx-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" id="reg-lastname" class="input-field" placeholder="Lastname">
+                    <i class="bx bx-user"></i>
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="email" id="reg-email" class="input-field" placeholder="Email">
+                <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" id="reg-password" class="input-field" placeholder="Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="input-box">
+                <input type="text" id="reg-admin-code" class="input-field" placeholder="Admin Code (Opsional)">
+                <i class="bx bx-shield-quarter"></i>
+            </div>
+            <button type="button" class="submit" onclick="handleRegister()">Register</button>
+        </div>
+    </div>
+</div>
+
+<script src="../js/login.js"></script>
+</body>
+</html>

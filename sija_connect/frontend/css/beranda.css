@@ -1,0 +1,334 @@
+/*ROOT COLOR*/
+:root {
+  --main: #5fc3e4;
+  --bg-soft: #f7fcff;
+  --bg-sky: #eaf6fb;
+}
+
+body {
+  background-color: var(--bg-soft) !important;
+  overflow-x: hidden; 
+}
+
+/* SCROLL EFFECT */
+.section {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(60px);
+  transition: all 0.9s ease;
+}
+
+.section.show {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* KONTEN UTAMA */
+.container {
+  display: flex;
+  gap: 60px;
+  padding: 120px 80px 80px 80px; 
+  background: linear-gradient(180deg, var(--bg-soft), var(--bg-sky));
+  max-width: 100%; 
+  justify-content: center;
+}
+
+main {
+  padding-top: 0; 
+}
+
+/* KONTEN KIRI */
+.content-left {
+  flex: 1;
+  max-width: 700px;
+}
+
+.content-left h1 {
+  margin-bottom: 20px;
+}
+
+.content-left h2 {
+  margin-top: 20px;
+}
+
+/* VISI & MISI */
+.visi-misi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.visi,
+.misi {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 12px 26px rgba(0,0,0,0.08);
+}
+
+.visi h2,
+.misi h2 {
+  color: var(--main);
+  margin-bottom: 12px;
+}
+
+.misi ol {
+  padding-left: 20px;
+  line-height: 1.8;
+}
+
+/* TEKS */
+.content-left p,
+.visi p,
+.misi li,
+.siconnect-box p,
+.mapel-desc {
+  text-align: justify;
+  line-height: 1.8;
+  color: #333;
+  font-size: 18px;
+}
+
+/* KONTEN KANAN */
+.content-right {
+  width: 439px;
+  display: flex;
+  align-items: center;
+  margin-left: 75px;
+}
+
+.box {
+  width: 100%;
+}
+
+.box iframe {
+  width: 87%; 
+  height: 250px;
+  border-radius: 18px;
+  border: none;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.15);
+}
+
+/* SiCONNECT SECTION */
+.siconnect-section {
+  padding: 120px 80px;
+  background: linear-gradient(180deg, var(--bg-sky), var(--bg-soft));
+  overflow: visible; 
+  display: flex;
+  justify-content: flex-start; 
+}
+
+/* BOX PUTIH */
+.siconnect-box {
+  position: relative;
+  width: 100%;
+  max-width: 850px; 
+  margin-left: 0; 
+  background: #ffffff;
+  padding: 60px 60px 60px 60px; 
+  border-radius: 28px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+  z-index: 2;
+}
+
+/* TEKS */
+.siconnect-text {
+  max-width: 100%; 
+}
+
+.siconnect-text h2 {
+  color: var(--main);
+  margin-bottom: 20px;
+  font-size: 32px;
+}
+
+/* GAMBAR SICONNECT*/
+.siconnect-image {
+  position: absolute;
+  right: -500px; 
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+.siconnect-image img {
+  width: 480px; 
+  height: auto;
+  filter: drop-shadow(0 20px 35px rgba(0,0,0,0.20));
+  pointer-events: none; 
+}
+
+/* MAPEL */
+.mapel-section {
+  padding: 160px;
+  background: linear-gradient(180deg, var(--bg-soft), var(--bg-sky));
+  text-align: center;
+}
+
+.mapel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mapel-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  border-left: 6px solid var(--main);
+  transition: all 0.3s ease;
+}
+
+.mapel-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.1);
+}
+
+/*  SISWA  */
+.siswa-section {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 100px 80px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.siswa-card h3 {
+  font-size: 1.2rem;  
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+
+/*  CARD SISWA  */
+.siswa-card {
+  position: relative;
+  z-index: 1;
+  width: 220px;
+  padding: 26px;
+  text-align: center;
+  background: linear-gradient(180deg, #f9fdff, #eaf6fb);
+  border-radius: 18px;
+  border: 1px solid rgba(31, 111, 178, 0.25);
+  box-shadow: 0 12px 28px rgba(31, 111, 178, 0.15);
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(50px);
+  transition: all 0.8s ease;
+}
+
+.siswa-card.show {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.siswa-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 18px 36px rgba(31, 111, 178, 0.25);
+}
+
+.siswa-card .kelas {
+  font-size: 1rem;  
+  color: var(--primary);
+}
+
+/*  FOTO JAJAR GENJANG  */
+.foto-wrapper {
+  width: 160px;
+  height: 220px;
+  margin: 0 auto 18px;
+  background: #eaf6fb;
+  transform: skew(-12deg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+}
+
+.foto-jajang {
+  width: 100%;
+  height: 100%;
+  transform: skew(12deg) scale(1.12);
+}
+
+.foto-jajang img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*  PARTIKEL SISWA  */
+#particles-js {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/*  RESPONSIVE */
+@media (max-width: 1100px) {
+  .siconnect-image {
+    right: -20px;
+  }
+  .siconnect-image img {
+    width: 350px;
+  }
+}
+
+@media (max-width: 950px) {
+  .container {
+    flex-direction: column;
+    padding: 80px 30px;
+    align-items: center;
+  }
+
+  .content-right {
+    width: 100%;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .visi-misi {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .siconnect-box {
+    margin: 0 auto; 
+    padding: 40px;
+    text-align: center;
+  }
+
+  .siconnect-image {
+    position: static; 
+    transform: none;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .siconnect-image img {
+    width: 80%;
+    max-width: 300px;
+  }
+  
+  .siconnect-text p {
+    text-align: center;
+  }
+
+  .siswa-section {
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 30px;
+  }
+
+  .siswa-card {
+    width: 100%;
+    max-width: 260px;
+  }
+}

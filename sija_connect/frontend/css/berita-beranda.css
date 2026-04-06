@@ -1,0 +1,231 @@
+/* BERITA SLIDER  */
+
+/* Section */
+.berita-section {
+  padding: 80px 60px;
+  background: #e8f1f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1160px;
+}
+
+.slider-box {
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.slider-viewport {
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.slider-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.5s cubic-bezier(.4, 0, .2, 1);
+  will-change: transform;
+}
+
+/*  Setiap Kotak (Card)  */
+.news-card {
+  flex: 0 0 calc((100% - 40px) / 3);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+
+/*  Bagian Atas: Gambar / Placeholder  */
+.card-image {
+  width: 100%;
+  aspect-ratio: 4 / 3.2;
+  object-fit: cover;
+  display: block;
+}
+
+.card-img-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-placeholder img {
+  max-width: 65%;
+  max-height: 55%;
+  object-fit: contain;
+}
+
+/* --- Bagian Bawah: Label --- */
+.card-label {
+  padding: 18px 12px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+}
+
+.card-label .label-line {
+  width: 38px;
+  height: 4px;
+  background: #3b9fd4;
+  border-radius: 2px;
+}
+
+.card-label span {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2a7ab5;
+  letter-spacing: 0.3px;
+}
+
+/* TOMBOL PANAH  */
+.arrow-btn {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border: none;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+
+.arrow-btn:hover {
+  background: #eaf6fb;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.arrow-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: #5a9fc0;
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.arrow-btn.prev { margin-right: 14px; }
+.arrow-btn.next { margin-left: 14px; }
+
+/*  DOT INDICATOR */
+.dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.dot {
+  height: 10px;
+  border-radius: 5px;
+  background: #c5dce8;
+  border: none;
+  cursor: pointer;
+  transition: background 0.35s, width 0.35s;
+  width: 10px;
+}
+
+.dot.active {
+  background: #2a7ab5;
+  width: 28px;
+}
+
+/*  RESPONSIVE */
+@media (max-width: 900px) {
+  .berita-section {
+    padding: 60px 24px;
+  }
+
+  .news-card {
+    flex-basis: calc((100% - 20px) / 2);
+  }
+}
+
+@media (max-width: 560px) {
+  .news-card {
+    flex-basis: 100%;
+  }
+
+  .slider-box {
+    padding: 16px;
+  }
+}
+
+/*card */
+    .news-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .card-img-placeholder, .card-image {
+      width: 100%;
+      height: 400px; 
+      object-fit: cover; 
+      object-position: top; 
+      display: block;
+    }
+
+    .card-img-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0f0;
+    }
+
+    /* Judul Section "About SIJA" */
+    .section-title-container {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title-container h2 {
+      color: #0aa3b5;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .section-title-line {
+      width: 60px;
+      height: 4px;
+      background: #0aa3b5;
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+  

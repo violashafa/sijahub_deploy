@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Lomba - SijaHub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+    <style>
+        :root {
+            --primary: #0aa3b5;
+            --primary-light: #0aa3b522;
+            --primary-dark: #088e9d;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.05);
+            --radius-lg: 24px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: 40px 24px; }
+
+        .ad-slider { position: relative; width: 100%; height: 380px; margin-bottom: 50px; border-radius: 30px; overflow: hidden; box-shadow: 0 20px 40px rgba(10, 163, 181, 0.15); }
+        .slider-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide { min-width: 100%; height: 100%; position: relative; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+        .slide-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(15, 23, 42, 0.9)); padding: 50px; color: white; }
+        .slide-overlay h2 { font-size: 32px; margin: 0 0 10px 0; font-weight: 800; }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: none; color: white; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .slider-btn:hover { background: var(--primary); }
+        .prev { left: 25px; } .next { right: 25px; }
+
+        .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 24px; }
+        .page-header h1 { font-size: 42px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -1.5px; }
+        
+        .filters { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .filters input, .filters select { padding: 14px 18px; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 14px; outline: none; background: white; font-family: inherit; font-weight: 500; transition: 0.3s; }
+        .filters input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        
+        .btn-nav-saved { background: #10b981; color: white; border: none; padding: 14px 24px; border-radius: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.3s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+        .btn-nav-saved:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3); }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-bottom: 50px; }
+        .lomba-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; display: flex; flex-direction: column; border: 1px solid #f1f5f9; cursor: pointer; }
+        .lomba-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); }
+        
+        .lomba-card img { width: 100%; height: 220px; object-fit: cover; transition: 0.5s; }
+        .lomba-card:hover img { scale: 1.05; }
+        
+        .lomba-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .kat-badge { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; display: inline-block; margin-bottom: 12px; }
+        .lomba-content h3 { font-size: 20px; font-weight: 700; margin: 0 0 10px 0; color: var(--text-dark); line-height: 1.4; }
+        .lomba-content p { font-size: 14px; color: var(--text-light); margin-bottom: 20px; line-height: 1.6; }
+
+        .card-footer { display: flex; gap: 10px; margin-top: auto; }
+        .btn-detail { flex: 1; background: var(--primary); color: white; padding: 14px; border-radius: 14px; border: none; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .btn-detail:hover { background: var(--primary-dark); }
+
+        .btn-save-card { width: 48px; height: 48px; background: #f1f5f9; color: #64748b; border: none; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .btn-save-card.saved { background: #fee2e2; color: #ef4444; }
+
+        .toast { position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 10px; z-index: 9999; transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); font-weight: 600; }
+        .toast.show { transform: translateX(0); }
+        .toast.error { background: #ef4444; }
+
+        .popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(10px); padding: 20px; }
+        .popup-content { background: white; border-radius: 30px; padding: 40px; width: 100%; max-width: 850px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+        .close { position: absolute; top: 25px; right: 25px; font-size: 32px; cursor: pointer; color: #94a3b8; transition: 0.3s; }
+        .close:hover { color: var(--primary); transform: rotate(90deg); }
+
+        #pagination { display: flex; justify-content: center; gap: 10px; margin: 50px 0; }
+        .pagination-btn { width: 45px; height: 45px; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer; background: white; color: var(--text-dark); font-weight: 700; transition: 0.3s; }
+        .pagination-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px var(--primary-light); }
+    </style>
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <div id="toast" class="toast">
+        <span id="toastIcon">✅</span>
+        <span id="toastMsg">Berhasil!</span>
+    </div>
+
+    <div class="container">
+        <div class="ad-slider">
+            <div class="slider-wrapper" id="sliderWrapper">
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200" alt="Iklan 1">
+                    <div class="slide-overlay">
+                        <h2>Cyber Security Competition 2026</h2>
+                        <p>Daftarkan tim kamu sekarang dan menangkan total hadiah puluhan juta rupiah!</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200" alt="Iklan 2">
+                    <div class="slide-overlay">
+                        <h2>Web Design Challenge</h2>
+                        <p>Tunjukkan kreativitasmu dalam merancang antarmuka masa depan.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="slider-btn prev" onclick="moveSlide(-1)"><span class="material-symbols-rounded">chevron_left</span></button>
+            <button class="slider-btn next" onclick="moveSlide(1)"><span class="material-symbols-rounded">chevron_right</span></button>
+        </div>
+
+        <div class="page-header">
+            <div>
+                <h1>Info Lomba</h1>
+                <p style="color: #64748b; margin-top: 10px;">Temukan kompetisi bergengsi untuk asah skill kamu.</p>
+            </div>
+            <div class="filters">
+                <input type="text" id="searchLomba" placeholder="Cari judul lomba..." oninput="render(1)">
+                <select id="filterKategori" onchange="render(1)">
+                    <option value="">Semua Bidang</option>
+                </select>
+                <button class="btn-nav-saved" onclick="handleSavedNavigation()">
+                    <span class="material-symbols-rounded">bookmark</span> Koleksi
+                </button>
+            </div>
+        </div>
+
+        <div id="lombaGrid" class="card-grid"></div>
+        <div id="pagination"></div>
+    </div>
+
+    <div id="detailPopup" class="popup">
+        <div class="popup-content">
+            <span class="close material-symbols-rounded" onclick="closePopup()">close</span>
+            <div id="popupBody"></div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        const API_URL = 'https://localhost:5000/api/competitions';
+        let lombaData = [];
+        let currentPage = 1;
+        const itemsPerPage = 9;
+        const token = localStorage.getItem('token'); 
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            document.getElementById('toastIcon').innerText = type === 'success' ? '✅' : '❌';
+            toast.className = `toast ${type === 'error' ? 'error' : ''} show`;
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        // Fungsi untuk handle klik ke halaman koleksi
+        function handleSavedNavigation() {
+            if(!token) {
+                showToast('Harus login terlebih dahulu!', 'error');
+                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+            } else {
+                window.location.href = 'simpan_lomba.html';
+            }
+        }
+
+        let slideIndex = 0;
+        function moveSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            if(slides.length === 0) return;
+            slideIndex = (slideIndex + n + slides.length) % slides.length;
+            document.getElementById('sliderWrapper').style.transform = `translateX(-${slideIndex * 100}%)`;
+        }
+
+        async function init() {
+            try {
+                const resH = await fetch('../components/header.html');
+                const resF = await fetch('../components/footer.html');
+                if(resH.ok) document.getElementById('header').innerHTML = await resH.text();
+                if(resF.ok) document.getElementById('footer').innerHTML = await resF.text();
+                if (typeof updateNavbarByRole === "function") updateNavbarByRole();
+                await loadData();
+            } catch(e) { console.error("Error init"); }
+        }
+
+        async function loadData() {
+            try {
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: headers
+                });
+                const json = await response.json();
+                lombaData = json.data || [];
+                updateCategoryOptions();
+                render(1);
+            } catch (e) { console.error("Error API:", e); }
+        }
+
+        function updateCategoryOptions() {
+            const select = document.getElementById('filterKategori');
+            const categories = [...new Set(lombaData.map(item => item.kategoriLomba))].filter(Boolean);
+            select.innerHTML = '<option value="">Semua Bidang</option>';
+            categories.sort().forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                select.appendChild(opt);
+            });
+        }
+
+        function render(page = 1) {
+            currentPage = page;
+            const search = document.getElementById('searchLomba').value.toLowerCase();
+            const kat = document.getElementById('filterKategori').value;
+
+            const filtered = lombaData.filter(l => {
+                const mSearch = (l.judul || "").toLowerCase().includes(search) || (l.penyelenggara || "").toLowerCase().includes(search);
+                const mKat = kat ? l.kategoriLomba === kat : true;
+                return mSearch && mKat;
+            });
+
+            const grid = document.getElementById('lombaGrid');
+            const start = (page - 1) * itemsPerPage;
+            const items = filtered.slice(start, start + itemsPerPage);
+
+            grid.innerHTML = items.map(item => `
+                <div class="lomba-card" onclick="showDetail('${item._id}')">
+                    <img src="${item.poster ? item.poster : 'https://via.placeholder.com/400x200'}" onerror="this.src='https://via.placeholder.com/400x200'">
+                    <div class="lomba-content">
+                        <span class="kat-badge">${item.kategoriLomba}</span>
+                        <h3>${item.judul}</h3>
+                        <p>${item.deskripsiSingkat || 'Klik detail untuk info selengkapnya.'}</p>
+                        <div class="card-footer">
+                            <button class="btn-detail">Lihat Detail</button>
+                            <button class="btn-save-card ${item.isSaved ? 'saved' : ''}" 
+                                onclick="event.stopPropagation(); toggleSave('${item._id}')">
+                                <span class="material-symbols-rounded">${item.isSaved ? 'bookmark_added' : 'bookmark'}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') || '<div style="grid-column:1/-1; text-align:center; padding:40px;">Lomba tidak ditemukan.</div>';
+
+            renderPagination(Math.ceil(filtered.length / itemsPerPage), page);
+        }
+
+        async function toggleSave(id) {
+            if(!token) {
+                showToast('Harus login terlebih dahulu!', 'error');
+                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/${id}/save`, {
+                    method: 'PATCH',
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const json = await res.json();
+                
+                if(res.ok) {
+                    const index = lombaData.findIndex(l => l._id === id);
+                    if(index !== -1) {
+                        lombaData[index].isSaved = json.data.isSaved;
+                    }
+                    showToast(json.data.isSaved ? "Berhasil disimpan!" : "Dihapus dari koleksi");
+                    render(currentPage);
+                }
+            } catch (e) { 
+                console.error("Error saving:", e);
+                showToast("Gagal memproses permintaan", "error");
+            }
+        }
+
+        function showDetail(id) {
+            const j = lombaData.find(l => l._id === id);
+            if(!j) return;
+            
+            document.getElementById('popupBody').innerHTML = `
+                <div style="display:flex; gap:30px; margin-bottom:30px; flex-wrap:wrap;">
+                    <img src="${j.poster ? j.poster : 'https://via.placeholder.com/400'}" style="width:280px; height:380px; border-radius:20px; object-fit:cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                    <div style="flex:1; min-width:300px;">
+                        <h2 style="margin:0; font-size:32px; color:var(--primary); font-weight:800; letter-spacing:-1px;">${j.judul}</h2>
+                        <p style="color:var(--text-light); font-weight:600; margin:10px 0;">Penyelenggara: ${j.penyelenggara || '-'}</p>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin:25px 0; background:#f8fafc; padding:20px; border-radius:20px;">
+                            <div><small style="color:#94a3b8; font-weight:800; display:block; margin-bottom:4px; text-transform:uppercase; font-size:10px;">Peserta</small><span style="font-weight:700;">${j.kategoriPeserta ? (Array.isArray(j.kategoriPeserta) ? j.kategoriPeserta.join(', ') : j.kategoriPeserta) : 'Umum'}</span></div>
+                            <div><small style="color:#94a3b8; font-weight:800; display:block; margin-bottom:4px; text-transform:uppercase; font-size:10px;">Biaya</small><span style="font-weight:700; color:#10b981;">${j.biaya == 0 ? 'Gratis' : 'Rp '+j.biaya.toLocaleString()}</span></div>
+                            <div><small style="color:#94a3b8; font-weight:800; display:block; margin-bottom:4px; text-transform:uppercase; font-size:10px;">Lokasi</small><span style="font-weight:700;">${j.tempat || 'Online'}</span></div>
+                            <div><small style="color:#94a3b8; font-weight:800; display:block; margin-bottom:4px; text-transform:uppercase; font-size:10px;">Deadline</small><span style="font-weight:700; color:#ef4444;">${j.tanggalSelesai ? new Date(j.tanggalSelesai).toLocaleDateString('id-ID') : '-'}</span></div>
+                        </div>
+                        <button class="btn-detail" style="padding:16px; font-size:16px; width:100%;" onclick="window.open('${j.linkDaftar}', '_blank')">Daftar Sekarang</button>
+                    </div>
+                </div>
+                <div style="border-top:1px solid #eee; padding-top:25px;">
+                    <h4 style="margin:0 0 15px 0; font-size:18px;">Deskripsi Lengkap</h4>
+                    <p style="white-space:pre-wrap; color:#475569; line-height:1.7; font-size:15px;">${j.deskripsiLengkap || 'Tidak ada deskripsi detail.'}</p>
+                </div>
+            `;
+            document.getElementById('detailPopup').style.display = 'flex';
+        }
+
+        function closePopup() { document.getElementById('detailPopup').style.display = 'none'; }
+
+        function renderPagination(total, page) {
+            const p = document.getElementById('pagination'); p.innerHTML = '';
+            if(total <= 1) return;
+            for (let i = 1; i <= total; i++) {
+                const b = document.createElement('button');
+                b.className = `pagination-btn ${i===page?'active':''}`;
+                b.innerText = i;
+                b.onclick = () => { render(i); window.scrollTo({top: 400, behavior: 'smooth'}); };
+                p.appendChild(b);
+            }
+        }
+
+        window.onclick = (e) => { if (e.target.classList.contains('popup')) closePopup(); }
+        
+        init();
+        setInterval(() => moveSlide(1), 5000); 
+    </script>
+    <script src="../js/header.js"></script>
+</body>
+</html>

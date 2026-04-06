@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loker Tersimpan - SijaHub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+    <style>
+        :root {
+            --primary: #0aa3b5;
+            --primary-dark: #088e9d;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.05);
+            --radius-lg: 24px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: 60px 24px; min-height: 80vh; }
+
+        .page-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 48px; flex-wrap: wrap; gap: 24px; 
+        }
+        .page-header h1 { font-size: 36px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -1px; }
+
+        .btn-back { 
+            background: white; color: var(--text-dark); border: 1px solid #e2e8f0; padding: 12px 20px; 
+            border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: 0.3s; text-decoration: none; font-size: 14px;
+        }
+        .btn-back:hover { background: #f1f5f9; transform: translateX(-5px); }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 32px; }
+
+        .loker-card { 
+            background: var(--white); border-radius: var(--radius-lg); padding: 30px;
+            box-shadow: var(--shadow-md); transition: 0.3s; 
+            position: relative; border: 1px solid #f1f5f9; display: flex; flex-direction: column;
+        }
+        .loker-card:hover { transform: translateY(-10px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1); }
+
+        .saved-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #ecfdf5; color: #10b981; padding: 6px 14px; 
+            border-radius: 10px; font-size: 12px; font-weight: 700;
+            margin-bottom: 15px; width: fit-content;
+        }
+
+        .loker-card h3 { font-size: 22px; font-weight: 700; margin: 0 0 5px 0; color: var(--text-dark); }
+        .loker-card .company { color: var(--primary); font-weight: 600; font-size: 16px; margin-bottom: 15px; }
+        .loker-card .location { 
+            display: flex; align-items: center; gap: 5px; color: var(--text-light); 
+            font-size: 14px; margin-bottom: 20px; 
+        }
+
+        .card-footer { display: flex; gap: 10px; border-top: 1px dashed #e2e8f0; padding-top: 20px; margin-top: auto; }
+        
+        .btn-apply { 
+            flex: 3; background: var(--primary); color: white; border: none; padding: 12px; 
+            border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s;
+            text-align: center; text-decoration: none;
+        }
+        .btn-apply:hover { background: var(--primary-dark); }
+
+        /* Style Tombol Share & Delete */
+        .btn-icon { 
+            width: 44px; height: 44px; border: none; border-radius: 12px; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            transition: 0.3s; 
+        }
+        .btn-share { background: #f1f5f9; color: var(--text-light); }
+        .btn-share:hover { background: #e2e8f0; color: var(--text-dark); }
+        
+        .btn-remove { background: #fee2e2; color: #ef4444; }
+        .btn-remove:hover { background: #fecaca; transform: scale(1.05); }
+
+        /* Toast Notif */
+        .toast {
+            position: fixed; top: 20px; right: 20px; background: #0aa3b5; color: white; 
+            padding: 15px 25px; border-radius: 12px; z-index: 9999;
+            transform: translateX(150%); transition: 0.4s; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .toast.show { transform: translateX(0); }
+
+        .empty-state { 
+            grid-column: 1 / -1; text-align: center; padding: 80px 20px; 
+            background: white; border-radius: 24px; border: 2px dashed #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <div id="toast" class="toast">
+        <span class="material-symbols-rounded">link</span>
+        <span>Link berhasil disalin!</span>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>Koleksi Simpanan</h1>
+                <p style="color: #64748b; margin-top: 8px;">Daftar lowongan kerja yang telah Anda tandai sebelumnya.</p>
+            </div>
+            <a href="view_infoloker.html" class="btn-back">
+                <span class="material-symbols-rounded">arrow_back</span> Kembali ke Info Loker
+            </a>
+        </div>
+
+        <div id="lokerGrid" class="card-grid"></div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        const API_URL = 'https://localhost:5000/api/jobs';
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert("Silakan login terlebih dahulu.");
+            window.location.href = 'login.html';
+        }
+
+        // Fungsi Share (Sama dengan halaman utama)
+        function shareLoker(id, posisi, perusahaan) {
+            const shareUrl = `${window.location.origin}/pages/view_infoloker.html?id=${id}`;
+            navigator.clipboard.writeText(`Cek loker ini: ${posisi} di ${perusahaan}\nLink: ${shareUrl}`)
+                .then(() => {
+                    const t = document.getElementById('toast');
+                    t.classList.add('show');
+                    setTimeout(() => t.classList.remove('show'), 3000);
+                });
+        }
+
+        async function init() {
+            try {
+                const resH = await fetch('../components/header.html');
+                const resF = await fetch('../components/footer.html');
+                if(resH.ok) document.getElementById('header').innerHTML = await resH.text();
+                if(resF.ok) document.getElementById('footer').innerHTML = await resF.text();
+                
+                if (typeof updateNavbarByRole === "function") updateNavbarByRole();
+                await fetchSavedData();
+            } catch (e) { console.error("Init error:", e); }
+        }
+
+        async function fetchSavedData() {
+            try {
+                const res = await fetch(API_URL, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const json = await res.json();
+                const savedJobs = (json.data || []).filter(job => job.isSaved === true);
+                render(savedJobs);
+            } catch (error) {
+                console.error("Gagal mengambil data:", error);
+            }
+        }
+
+        function render(data) {
+            const grid = document.getElementById('lokerGrid');
+            
+            if (!data || data.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-rounded" style="color:#cbd5e1; font-size:80px;">bookmark_border</span>
+                        <h2 style="color:#475569;">Belum ada loker yang disimpan</h2>
+                        <button class="btn-apply" style="max-width:250px; margin:25px auto; padding: 15px;" 
+                            onclick="window.location.href='view_infoloker.html'">Cari Loker Sekarang</button>
+                    </div>`;
+                return;
+            }
+
+            grid.innerHTML = data.map(item => `
+                <div class="loker-card">
+                    <div class="saved-badge">
+                        <span class="material-symbols-rounded" style="font-size:16px;">verified</span> Tersimpan
+                    </div>
+                    <h3>${item.posisi}</h3>
+                    <p class="company">${item.perusahaan}</p>
+                    <div class="location">
+                        <span class="material-symbols-rounded" style="font-size:18px;">location_on</span>
+                        ${item.lokasi || 'Remote / Indonesia'}
+                    </div>
+                    
+                    <div class="card-footer">
+                        <a href="${item.linkDaftar}" target="_blank" class="btn-apply">Lamar Sekarang</a>
+                        
+                        <button class="btn-icon btn-share" title="Bagikan" onclick="shareLoker('${item._id}', '${item.posisi}', '${item.perusahaan}')">
+                            <span class="material-symbols-rounded">share</span>
+                        </button>
+
+                        <button class="btn-icon btn-remove" title="Hapus dari simpanan" onclick="removeSave('${item._id}')">
+                            <span class="material-symbols-rounded">delete</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function removeSave(id) {
+            if(confirm("Hapus loker ini dari daftar simpanan?")) {
+                try {
+                    const res = await fetch(`${API_URL}/${id}/save`, {
+                        method: 'PATCH',
+                        headers: { 
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if(res.ok) fetchSavedData();
+                } catch (e) { alert("Gagal menghapus."); }
+            }
+        }
+
+        init();
+    </script>
+    <script src="../js/header.js"></script>
+</body>
+</html>

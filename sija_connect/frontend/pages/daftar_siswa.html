@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIJAHUB - Daftar Siswa</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+    <style>
+        :root {
+            --primary: #0aa3b5;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: auto;
+            min-height: 80vh;
+        }
+
+        /* --- NOTIFIKASI STYLE (TETAP ADA) --- */
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: white; /* Notifikasi putih agar bersih */
+            color: #333;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.5s ease forwards;
+            border-left: 5px solid var(--primary);
+            min-width: 250px;
+            font-weight: 600;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast.error { border-left: 5px solid #ef4444; color: #ef4444; }
+
+        /* --- POPUP TEMA TERANG (SUDAH DIPERBAIKI) --- */
+        .popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6); /* Overlay transparan hitam */
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: white; /* KEMBALI KE PUTIH */
+            color: #333; /* TEKS GELAP */
+            padding: 30px;
+            border-radius: 25px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Form di dalam Popup Terang */
+        #studentForm input, #studentForm select {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            color: #333;
+            padding: 12px;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        #studentForm input:focus { border-color: var(--primary); }
+        #studentForm label { color: #666; font-weight: 600; margin-top: 5px; }
+
+        /* --- SISA CSS (KARTU DLL) --- */
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; }
+        .page-title { font-size: 40px; font-weight: 700; color: var(--primary); margin: 0; }
+        .filters { display: flex; gap: 12px; background: white; padding: 15px; border-radius: 15px; box-shadow: var(--shadow); flex-wrap: wrap; align-items: center; }
+        .filters input, .filters select { padding: 10px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
+        .card { background: white; border-radius: 25px; padding: 25px; text-align: center; box-shadow: var(--shadow); transition: 0.3s; border-bottom: 4px solid transparent; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .card:hover { transform: translateY(-10px); border-bottom: 4px solid var(--primary); }
+        .avatar { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--primary); background: #eee; }
+        .card h3 { color: var(--primary); font-size: 20px; margin: 5px 0; font-weight: 700; }
+        .status-badge { font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
+        
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .close { position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: var(--primary); font-weight: bold; }
+        #pagination { display: flex; justify-content: center; gap: 10px; margin: 40px 0; }
+        .pagination-btn { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-weight: 600; }
+        .pagination-btn.active { background: var(--primary); color: white; }
+        .btn-create { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .detail-btn { background: var(--primary); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; margin-top: 15px; font-weight: 600; }
+        
+        /* Tombol Aksi di Detail */
+        .btn-edit { background: #e2e8f0; color: #333; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        .btn-delete { background: #fee2e2; color: #ef4444; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        #studentForm { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; text-align: left; }
+    </style>
+</head>
+
+<body>
+
+    <div id="header"></div>
+    <div id="notification-container"></div> 
+    
+    <main class="container">
+        <div class="page-header">
+            <h2 class="page-title">Daftar Siswa</h2>
+            <div class="filters">
+                <button id="addBtn" class="btn-create" style="display:none;">+ Tambah Siswa</button>
+                <input type="text" id="searchName" placeholder="Cari nama siswa...">
+                <select id="filterAngkatan">
+                    <option value="">Semua Angkatan</option>
+                </select>
+                <select id="filterKelas">
+                    <option value="">Semua Kelas</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="cardGrid" class="card-grid"></div>
+        <div id="pagination"></div>
+    </main>
+
+    <div id="footer"></div>
+
+    <div id="detailPopup" class="popup">
+        <div class="popup-content">
+            <span id="closePopup" class="close">&times;</span>
+            <img id="popupFoto" class="avatar" src="">
+            <h2 id="popupNama"></h2>
+            <div id="extraInfo" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; text-align: left; line-height: 1.6;"></div>
+            <div id="adminActions" class="detail-actions" style="margin-top: 25px; display: none; gap: 10px; justify-content: center;">
+                <button id="editBtn" class="btn-edit">Edit Data</button>
+                <button id="deleteBtn" class="btn-delete">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="formPopup" class="popup">
+        <div class="popup-content" style="max-width: 500px;">
+            <span id="closeForm" class="close">&times;</span>
+            <h2 id="formTitle">Tambah Siswa</h2>
+            <form id="studentForm">
+                <input type="hidden" id="studentId">
+                <input type="text" id="namaLengkap" placeholder="Nama Lengkap" required>
+                <input type="text" id="kelas" placeholder="Kelas (Contoh: XII SIJA D)" required>
+                <input type="text" id="angkatan" placeholder="Angkatan (Contoh: 48)" required>
+                <select id="status" required>
+                    <option value="">-- Pilih Status --</option>
+                    <option value="siswa">Siswa Aktif</option>
+                    <option value="alumni">Alumni</option>
+                </select>
+                <input type="number" id="tahunLulus" placeholder="Tahun Lulus">
+                <input type="text" id="aktivitas" placeholder="Aktivitas (Contoh: Bekerja/Kuliah)">
+                <input type="text" id="instansi" placeholder="Instansi (Contoh: PT Telkom)">
+                <input type="text" id="instagram" placeholder="Username Instagram">
+                <label for="foto">Foto Profil:</label>
+                <input type="file" id="foto" accept="image/*">
+                <button type="submit" class="btn-create" style="margin-top: 10px;">Simpan Data</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/header.js"></script>
+
+    <script>
+        // --- LOGIKA JAVASCRIPT KAMU TETAP SAMA (TIDAK ADA YANG DIUBAH) ---
+        const API_URL = 'https://localhost:5000/api/students';
+        let allStudents = [];
+        let currentPage = 1;
+        const limit = 12;
+
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('userRole');
+
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notification-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(20px)';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        async function initializeApp() {
+            if (role === 'admin') {
+                document.getElementById('addBtn').style.display = 'block';
+                document.getElementById('adminActions').style.display = 'flex';
+            }
+            try {
+                const [hRes, fRes] = await Promise.all([
+                    fetch('../components/header.html').catch(() => null),
+                    fetch('../components/footer.html').catch(() => null)
+                ]);
+                if (hRes && hRes.ok) document.getElementById('header').innerHTML = await hRes.text();
+                if (fRes && fRes.ok) document.getElementById('footer').innerHTML = await fRes.text();
+                await fetchStudents();
+            } catch (err) { console.error("Inisialisasi Gagal:", err); }
+        }
+
+        async function fetchStudents(page = 1) {
+            try {
+                const res = await fetch(`${API_URL}?page=${page}&limit=${limit}`);
+                const result = await res.json();
+                if (result.success) {
+                    allStudents = result.data.data;
+                    currentPage = result.data.currentPage;
+                    renderFilters(); 
+                    renderCards(allStudents);
+                    renderPagination(result.data.totalPage); 
+                }
+            } catch (err) {
+                document.getElementById('cardGrid').innerHTML = "<p>Gagal menyambung ke database.</p>";
+            }
+        }
+
+        function renderFilters() {
+            const angSelect = document.getElementById('filterAngkatan');
+            const kelSelect = document.getElementById('filterKelas');
+            const listAng = [...new Set(allStudents.map(s => s.angkatan))].sort();
+            const listKel = [...new Set(allStudents.map(s => s.kelas))].sort();
+            const selAng = angSelect.value;
+            const selKel = kelSelect.value;
+            angSelect.innerHTML = '<option value="">Semua Angkatan</option>' +
+                listAng.map(a => `<option value="${a}" ${a==selAng?'selected':''}>Angkatan ${a}</option>`).join('');
+            kelSelect.innerHTML = '<option value="">Semua Kelas</option>' +
+                listKel.map(k => `<option value="${k}" ${k==selKel?'selected':''}>${k}</option>`).join('');
+        }
+
+        function renderCards(data) {
+            const grid = document.getElementById('cardGrid');
+            grid.innerHTML = data.length ? data.map(s => `
+                <div class="card" onclick='showDetail(${JSON.stringify(s)})'>
+                    <img src="${s.foto || 'https://via.placeholder.com/110'}" class="avatar">
+                    <h3>${s.namaLengkap}</h3>
+                    <span class="status-badge" style="background:${s.status==='alumni'?'#ff9800':'#00bcd4'}; color:white;">${s.status}</span>
+                    <p style="margin: 0; color: #666;">${s.kelas}</p>
+                    <p style="margin: 0; font-size: 13px;">Angkatan ${s.angkatan}</p>
+                    <button class="detail-btn">Lihat Detail</button>
+                </div>
+            `).join('') : '<div style="grid-column: 1/-1; text-align:center;"><p>Siswa tidak ditemukan.</p></div>';
+        }
+
+        function showDetail(s) {
+            window.selectedStudent = s; 
+            document.getElementById('popupFoto').src = s.foto || 'https://via.placeholder.com/120';
+            document.getElementById('popupNama').innerText = s.namaLengkap;
+            document.getElementById('extraInfo').innerHTML = `
+                <p><b>Kelas:</b> ${s.kelas}</p>
+                <p><b>Angkatan:</b> ${s.angkatan}</p>
+                <p><b>Status:</b> ${s.status?.toUpperCase()}</p>
+                <p><b>Tahun Lulus:</b> ${s.tahunLulus || '-'}</p>
+                <p><b>Aktivitas:</b> ${s.aktivitas || '-'}</p>
+                <p><b>Instansi:</b> ${s.instansi || '-'}</p>
+                <p><b>Instagram:</b> ${s.mediaSosial?.instagram ? '@'+s.mediaSosial.instagram : '-'}</p>
+            `;
+            document.getElementById('detailPopup').style.display = 'flex';
+        }
+
+        document.getElementById('deleteBtn').onclick = async () => {
+            const s = window.selectedStudent;
+            if (!confirm(`Hapus data ${s.namaLengkap}?`)) return;
+            try {
+                const res = await fetch(`${API_URL}/${s._id}`, { 
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    showNotification("Data siswa berhasil dihapus!");
+                    document.getElementById('detailPopup').style.display = 'none';
+                    fetchStudents(currentPage);
+                }
+            } catch (err) { showNotification("Gagal menghapus.", "error"); }
+        };
+
+        document.getElementById('editBtn').onclick = () => {
+            const s = window.selectedStudent;
+            document.getElementById('detailPopup').style.display = 'none';
+            document.getElementById('formTitle').innerText = 'Edit Data Siswa';
+            document.getElementById('studentId').value = s._id;
+            document.getElementById('namaLengkap').value = s.namaLengkap;
+            document.getElementById('kelas').value = s.kelas;
+            document.getElementById('angkatan').value = s.angkatan;
+            document.getElementById('status').value = s.status;
+            document.getElementById('tahunLulus').value = s.tahunLulus || '';
+            document.getElementById('aktivitas').value = s.aktivitas || '';
+            document.getElementById('instansi').value = s.instansi || '';
+            document.getElementById('instagram').value = s.mediaSosial?.instagram || '';
+            document.getElementById('formPopup').style.display = 'flex';
+        };
+
+        document.getElementById('studentForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('studentId').value;
+            const formData = new FormData();
+            formData.append('namaLengkap', document.getElementById('namaLengkap').value);
+            formData.append('kelas', document.getElementById('kelas').value);
+            formData.append('angkatan', document.getElementById('angkatan').value);
+            formData.append('status', document.getElementById('status').value);
+            formData.append('tahunLulus', document.getElementById('tahunLulus').value);
+            formData.append('aktivitas', document.getElementById('aktivitas').value);
+            formData.append('instansi', document.getElementById('instansi').value);
+            formData.append('instagram', document.getElementById('instagram').value);
+            
+            if (document.getElementById('foto').files[0]) {
+                formData.append('foto', document.getElementById('foto').files[0]);
+            }
+
+            const url = id ? `${API_URL}/${id}` : API_URL;
+            const method = id ? 'PUT' : 'POST';
+
+            try {
+                const res = await fetch(url, { 
+                    method: method, 
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData 
+                });
+                if (res.ok) {
+                    showNotification(id ? "Data berhasil diperbarui!" : "Siswa baru berhasil ditambahkan!");
+                    document.getElementById('formPopup').style.display = 'none';
+                    fetchStudents(currentPage);
+                } else {
+                    const err = await res.json();
+                    showNotification(err.message, "error");
+                }
+            } catch (err) { showNotification("Gagal menyimpan.", "error"); }
+        };
+
+        function renderPagination(total) {
+            const p = document.getElementById('pagination');
+            p.innerHTML = '';
+            if (total <= 1) return;
+            for (let i = 1; i <= total; i++) {
+                const btn = document.createElement('button');
+                btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => fetchStudents(i);
+                p.appendChild(btn);
+            }
+        }
+
+        function applyFilters() {
+            const s = document.getElementById('searchName').value.toLowerCase();
+            const a = document.getElementById('filterAngkatan').value;
+            const k = document.getElementById('filterKelas').value;
+            const filtered = allStudents.filter(st => 
+                st.namaLengkap.toLowerCase().includes(s) &&
+                (a === "" || st.angkatan.toString() === a) &&
+                (k === "" || st.kelas === k)
+            );
+            renderCards(filtered);
+        }
+
+        document.getElementById('searchName').addEventListener('input', applyFilters);
+        document.getElementById('filterAngkatan').addEventListener('change', applyFilters);
+        document.getElementById('filterKelas').addEventListener('change', applyFilters);
+
+        document.getElementById('addBtn').onclick = () => {
+            document.getElementById('studentForm').reset();
+            document.getElementById('studentId').value = '';
+            document.getElementById('formTitle').innerText = 'Tambah Siswa Baru';
+            document.getElementById('formPopup').style.display = 'flex';
+        };
+
+        document.getElementById('closePopup').onclick = () => document.getElementById('detailPopup').style.display = 'none';
+        document.getElementById('closeForm').onclick = () => document.getElementById('formPopup').style.display = 'none';
+        
+        window.onclick = (e) => { 
+            if (e.target.classList.contains('popup')) e.target.style.display = 'none'; 
+        };
+
+        initializeApp();
+    </script>
+</body>
+</html>

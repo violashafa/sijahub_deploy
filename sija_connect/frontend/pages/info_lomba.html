@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Info Lomba - SijaHub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/footer.css">
+
+  <style>
+    :root {
+      --primary: #0aa3b5;
+      --primary-dark: #088e9d;
+      --bg-body: #f8fafc;
+      --white: #ffffff;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.05);
+      --radius-lg: 24px;
+      --emerald-light: #ecfdf5;
+      --emerald-dark: #059669;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-dark);
+      margin: 0;
+    }
+
+    .container { max-width: 1200px; margin: auto; padding: 60px 24px; min-height: 80vh; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal { opacity: 0; }
+    .reveal.active { animation: fadeInUp 0.6s ease forwards; }
+
+    .page-header { 
+      display: flex; justify-content: space-between; align-items: center; 
+      margin-bottom: 48px; flex-wrap: wrap; gap: 24px; 
+    }
+    .page-header h1 { font-size: 40px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -1px; }
+
+    .btn-add { 
+      background: var(--primary); color: white; border: none; padding: 12px 24px; 
+      border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
+      transition: 0.3s;
+    }
+    .btn-add:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+    .btn-nav-saved { 
+      background: var(--emerald-light); 
+      color: var(--emerald-dark); 
+      border: none; 
+      padding: 12px 20px; 
+      border-radius: 12px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px;
+      transition: 0.3s;
+    }
+    .btn-nav-saved:hover { background: #d1fae5; transform: translateY(-2px); }
+
+    .filter-bar { 
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap; 
+      margin-bottom: 32px; background: white; padding: 12px; border-radius: 16px; box-shadow: var(--shadow-sm);
+    }
+    .filter-bar input, .filter-bar select { border: none; outline: none; background: transparent; font-family: inherit; font-size: 14px; }
+    .search-input { flex: 1; padding: 8px; }
+
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 32px; }
+
+    .lomba-card { 
+      background: var(--white); border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-md); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+      position: relative; border: 1px solid #f1f5f9; display: flex; flex-direction: column;
+    }
+    .lomba-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1); }
+
+    .poster-container { width: 100%; height: 200px; overflow: hidden; position: relative; }
+    .poster-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+    .lomba-card:hover .poster-container img { transform: scale(1.1); }
+
+    .category-badge {
+      position: absolute; top: 15px; left: 15px; background: rgba(10, 163, 181, 0.9);
+      color: white; padding: 6px 14px; border-radius: 10px; font-size: 11px; font-weight: 800; backdrop-filter: blur(4px);
+    }
+
+    .lomba-content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+    .lomba-content h3 { font-size: 20px; font-weight: 700; margin: 0 0 10px 0; color: var(--text-dark); line-height: 1.4; }
+    .lomba-content .desc { color: var(--text-light); font-size: 14px; margin-bottom: 16px; line-height: 1.6; }
+
+    .meta-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; margin-bottom: 20px; }
+    .meta-tag { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; background: #f1f5f9; color: #475569; display: flex; align-items: center; gap: 4px; }
+
+    .card-footer { display: flex; gap: 8px; border-top: 1px dashed #e2e8f0; padding-top: 20px; }
+    .btn-detail { flex: 2; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+    .btn-detail:hover { background: var(--primary-dark); }
+    
+    .btn-save-card { width: 44px; height: 44px; background: #f1f5f9; color: var(--text-light); border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+    .btn-save-card.saved { background: #fee2e2; color: #ef4444; }
+
+    .admin-tools { position: absolute; top: 15px; right: 15px; display: flex; gap: 6px; z-index: 10; }
+    .btn-tool { width: 32px; height: 32px; border-radius: 8px; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+
+    .popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; }
+    .popup-content { background: white; border-radius: 24px; padding: 35px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; }
+    .close { position: absolute; top: 20px; right: 20px; cursor: pointer; color: #94a3b8; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; font-family: inherit; }
+    .btn-submit { background: var(--primary); color: white; padding: 16px; border: none; border-radius: 12px; width: 100%; font-weight: 800; cursor: pointer; font-size: 16px; margin-top: 10px; }
+
+    .toast {
+      position: fixed; top: 20px; right: 20px; background: #10b981; color: white; 
+      padding: 15px 25px; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+      display: flex; align-items: center; gap: 10px; z-index: 9999;
+      transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      font-weight: 600;
+    }
+    .toast.show { transform: translateX(0); }
+    .toast.error { background: #ef4444; }
+
+    @media (max-width: 600px) { .page-header h1 { font-size: 32px; } }
+  </style>
+</head>
+<body>
+
+  <div id="header"></div>
+
+  <div id="toast" class="toast">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">Berhasil!</span>
+  </div>
+
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Info Lomba</h1>
+        <p style="color: #64748b; margin-top: 8px;">Asah bakatmu dan raih prestasi di berbagai kompetisi bergengsi.</p>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button class="btn-nav-saved" id="btnNavSaved" onclick="window.location.href='simpan_lomba.html'">
+          <span class="material-symbols-rounded">bookmark_heart</span> Tersimpan
+        </button>
+        <button class="btn-add" id="btnAddLomba" onclick="openForm()">
+          <span class="material-symbols-rounded">add_circle</span> Tambah Lomba
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <span class="material-symbols-rounded" style="color: #94a3b8; margin-left: 8px;">search</span>
+      <input type="text" id="searchLomba" class="search-input" placeholder="Cari judul atau penyelenggara..." oninput="renderLomba(1)">
+      
+      <span class="material-symbols-rounded" style="color: #94a3b8;">category</span>
+      <select id="filterKategori" onchange="renderLomba(1)" style="font-weight:600; color:var(--text-dark);">
+        <option value="">Semua Kategori</option>
+      </select>
+
+      <span class="material-symbols-rounded" style="color: #94a3b8;">groups</span>
+      <select id="filterPeserta" onchange="renderLomba(1)" style="font-weight:600; color:var(--text-dark);">
+        <option value="">Semua Peserta</option>
+        <option value="SD">SD</option>
+        <option value="SMP">SMP</option>
+        <option value="SMA">SMA</option>
+        <option value="Mahasiswa">Mahasiswa</option>
+        <option value="Umum">Umum</option>
+      </select>
+    </div>
+
+    <div id="lombaGrid" class="card-grid"></div>
+    <div id="pagination" style="display:flex; justify-content:center; gap:8px; margin-top:48px;"></div>
+  </div>
+
+  <div id="footer"></div>
+
+  <div id="formPopup" class="popup">
+    <div class="popup-content">
+      <span class="close material-symbols-rounded" onclick="closePopup('formPopup')">close</span>
+      <h2 id="formTitle" style="margin-bottom: 24px; font-weight: 800; color: var(--primary);">Form Lomba</h2>
+      <form id="lombaForm">
+        <input type="hidden" id="editId">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px">
+          <div class="form-group"><label>Judul Kompetisi</label><input type="text" id="fJudul" required></div>
+          <div class="form-group"><label>Kategori Lomba (cth: UI/UX, Web)</label><input type="text" id="fKategoriLomba" required></div>
+        </div>
+        <div class="form-group"><label>Kategori Peserta (Pisahkan dengan koma: SMA, Mahasiswa)</label><input type="text" id="fKategoriPeserta" required placeholder="SMA, Mahasiswa, Umum"></div>
+        <div class="form-group"><label>Deskripsi Singkat</label><input type="text" id="fDeskSingkat" required></div>
+        <div class="form-group"><label>Deskripsi Lengkap</label><textarea id="fDeskLengkap" rows="4" required></textarea></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px">
+          <div class="form-group"><label>Biaya (0 = Gratis)</label><input type="number" id="fBiaya" required></div>
+          <div class="form-group"><label>Tanggal Mulai</label><input type="date" id="fTglMulai" required></div>
+          <div class="form-group"><label>Tanggal Selesai</label><input type="date" id="fTglSelesai" required></div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px">
+          <div class="form-group"><label>Lokasi/Tempat</label><input type="text" id="fTempat" required></div>
+          <div class="form-group"><label>Penyelenggara</label><input type="text" id="fPenyelenggara" required></div>
+        </div>
+        <div class="form-group"><label>Link Pendaftaran</label><input type="url" id="fLink" required></div>
+        <div class="form-group"><label>Poster Lomba</label><input type="file" id="fPoster" accept="image/*"></div>
+        <button type="submit" id="btnSubmitForm" class="btn-submit">Simpan Lomba</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="detailPopup" class="popup">
+    <div class="popup-content">
+      <span class="close material-symbols-rounded" onclick="closePopup('detailPopup')">close</span>
+      <div id="detailBody"></div>
+    </div>
+  </div>
+
+  <script src="../js/header.js"></script>
+  <script>
+    const API_URL = 'https://localhost:5000/api/competitions';
+    let lombaData = [];
+    let currentPage = 1;
+    const itemsPerPage = 6;
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = message;
+      document.getElementById('toastIcon').innerText = type === 'success' ? '✅' : '❌';
+      toast.className = `toast ${type === 'error' ? 'error' : ''} show`;
+      setTimeout(() => { toast.classList.remove('show'); }, 3000);
+    }
+
+    async function loadLayout() {
+      try {
+        const resH = await fetch('../components/header.html');
+        document.getElementById('header').innerHTML = await resH.text();
+        const resF = await fetch('../components/footer.html');
+        document.getElementById('footer').innerHTML = await resF.text();
+      } catch (err) { console.error("Gagal load layout:", err); }
+    }
+
+    async function fetchData() {
+      try {
+        const res = await fetch(API_URL);
+        const json = await res.json();
+        lombaData = json.data || [];
+        updateCategoryOptions();
+        renderLomba(1);
+      } catch (err) { console.error(err); }
+    }
+
+    function updateCategoryOptions() {
+      const select = document.getElementById('filterKategori');
+      const categories = [...new Set(lombaData.map(item => item.kategoriLomba))].filter(Boolean);
+      select.innerHTML = '<option value="">Semua Kategori</option>';
+      categories.sort().forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderLomba(page = 1) {
+      currentPage = page;
+      const search = document.getElementById('searchLomba').value.toLowerCase();
+      const katLomba = document.getElementById('filterKategori').value;
+      const katPeserta = document.getElementById('filterPeserta').value;
+      
+      // LOGIKA ROLE ACCESS
+      const role = localStorage.getItem('userRole'); 
+      const btnAdd = document.getElementById('btnAddLomba');
+      const btnNavSaved = document.getElementById('btnNavSaved');
+
+      if(role === 'admin') {
+          btnAdd.style.display = 'flex';
+          btnNavSaved.style.display = 'none'; // Admin tidak perlu menu Tersimpan
+      } else {
+          btnAdd.style.display = 'none';
+          btnNavSaved.style.display = 'flex';
+      }
+
+      const filtered = lombaData.filter(l => {
+        const matchesSearch = l.judul.toLowerCase().includes(search) || l.penyelenggara.toLowerCase().includes(search);
+        const matchesKategori = katLomba ? (l.kategoriLomba === katLomba) : true;
+        const matchesPeserta = katPeserta ? l.kategoriPeserta.some(p => p.trim() === katPeserta) : true;
+        return matchesSearch && matchesKategori && matchesPeserta;
+      });
+
+      const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+      const start = (page - 1) * itemsPerPage;
+      const pageData = filtered.slice(start, start + itemsPerPage);
+
+      const grid = document.getElementById('lombaGrid');
+      grid.innerHTML = '';
+
+      pageData.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'lomba-card reveal';
+        
+        const saveAction = (role === 'guest' || !role) 
+            ? "showToast('Silakan login terlebih dahulu!', 'error')" 
+            : `toggleSave('${item._id}')`;
+
+        // JIKA ADMIN, JANGAN TAMPILKAN TOMBOL SAVE
+        const saveButtonHtml = role === 'admin' ? '' : `
+          <button class="btn-save-card ${item.isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); ${saveAction}">
+            <span class="material-symbols-rounded">${item.isSaved ? 'bookmark_added' : 'bookmark'}</span>
+          </button>
+        `;
+
+        card.innerHTML = `
+          <div class="admin-tools" style="display: ${role === 'admin' ? 'flex' : 'none'}">
+            <button class="btn-tool" style="background:#f39c12" onclick="event.stopPropagation(); editLomba('${item._id}')">✎</button>
+            <button class="btn-tool" style="background:#e74c3c" onclick="event.stopPropagation(); deleteLomba('${item._id}')">×</button>
+          </div>
+          <div class="poster-container" onclick="showDetail('${item._id}')">
+            <span class="category-badge">${item.kategoriLomba}</span>
+            <img src="${item.poster ? item.poster : 'https://via.placeholder.com/400x200'}" onerror="this.src='https://via.placeholder.com/400x200'">
+          </div>
+          <div class="lomba-content">
+            <h3 onclick="showDetail('${item._id}')" style="cursor:pointer">${item.judul}</h3>
+            <p class="desc">${item.deskripsiSingkat}</p>
+            <div class="meta-tags">
+              <span class="meta-tag"><span class="material-symbols-rounded" style="font-size:14px">payments</span> ${item.biaya == 0 ? 'Gratis' : 'Rp '+item.biaya.toLocaleString()}</span>
+              <span class="meta-tag"><span class="material-symbols-rounded" style="font-size:14px">event</span> ${new Date(item.tanggalSelesai).toLocaleDateString('id-ID', {day:'numeric', month:'short'})}</span>
+            </div>
+            <div class="card-footer">
+              <button class="btn-detail" onclick="showDetail('${item._id}')">Detail Lomba</button>
+              ${saveButtonHtml}
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      renderPagination(totalPages, page);
+      initScrollReveal();
+    }
+
+    function initScrollReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    function showDetail(id) {
+      const j = lombaData.find(x => x._id === id);
+      document.getElementById('detailBody').innerHTML = `
+        <div style="display:flex; gap:25px; margin-bottom:30px; flex-wrap:wrap;">
+          <img src="${j.poster ? j.poster : 'https://via.placeholder.com/400'}" style="width:250px; border-radius:15px; object-fit:cover;">
+          <div style="flex:1; min-width:250px;">
+            <h2 style="margin:0; font-size:28px; color:var(--primary); font-weight:800;">${j.judul}</h2>
+            <p style="color:#64748b; font-weight:600; margin:10px 0;">Penyelenggara: ${j.penyelenggara}</p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px;">
+              <div><small style="color:#94a3b8; font-weight:700;">PESERTA</small><p style="margin:4px 0; font-weight:700;">${j.kategoriPeserta.join(', ')}</p></div>
+              <div><small style="color:#94a3b8; font-weight:700;">BIAYA</small><p style="margin:4px 0; font-weight:700; color:#10b981;">${j.biaya == 0 ? 'Gratis' : 'Rp '+j.biaya.toLocaleString()}</p></div>
+              <div><small style="color:#94a3b8; font-weight:700;">TEMPAT</small><p style="margin:4px 0; font-weight:700;">${j.tempat}</p></div>
+              <div><small style="color:#94a3b8; font-weight:700;">DEADLINE</small><p style="margin:4px 0; font-weight:700; color:#ef4444;">${new Date(j.tanggalSelesai).toLocaleDateString('id-ID')}</p></div>
+            </div>
+            <button class="btn-submit" onclick="window.open('${j.linkDaftar}', '_blank')">Daftar Sekarang</button>
+          </div>
+        </div>
+        <div style="background:#f8fafc; padding:24px; border-radius:20px;">
+          <h4 style="margin:0 0 12px 0;">Deskripsi Lomba</h4>
+          <p style="white-space:pre-wrap; color:#475569; line-height:1.7;">${j.deskripsiLengkap}</p>
+        </div>
+      `;
+      document.getElementById('detailPopup').style.display = 'flex';
+    }
+
+    async function toggleSave(id) {
+      const token = localStorage.getItem('token');
+      if(!token) return showToast('Silakan login terlebih dahulu!', 'error');
+      try {
+        const res = await fetch(`${API_URL}/${id}/save`, { 
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if(res.ok) {
+          const json = await res.json();
+          showToast(json.data.isSaved ? "Lomba disimpan!" : "Simpanan dihapus!");
+          fetchData();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    // Fungsi Form & Delete Tetap Sama Seperti Sebelumnya
+    document.getElementById('lombaForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('editId').value;
+      const fData = new FormData();
+      fData.append('judul', document.getElementById('fJudul').value);
+      fData.append('kategoriPeserta', document.getElementById('fKategoriPeserta').value);
+      fData.append('kategoriLomba', document.getElementById('fKategoriLomba').value);
+      fData.append('deskripsiSingkat', document.getElementById('fDeskSingkat').value);
+      fData.append('deskripsiLengkap', document.getElementById('fDeskLengkap').value);
+      fData.append('biaya', document.getElementById('fBiaya').value);
+      fData.append('tanggalMulai', document.getElementById('fTglMulai').value);
+      fData.append('tanggalSelesai', document.getElementById('fTglSelesai').value);
+      fData.append('tempat', document.getElementById('fTempat').value);
+      fData.append('penyelenggara', document.getElementById('fPenyelenggara').value);
+      fData.append('linkDaftar', document.getElementById('fLink').value);
+      if(document.getElementById('fPoster').files[0]) fData.append('poster', document.getElementById('fPoster').files[0]);
+
+      try {
+        const res = await fetch(id ? `${API_URL}/${id}` : API_URL, { 
+            method: id ? 'PUT' : 'POST', 
+            body: fData,
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if(res.ok) { showToast("Data berhasil disimpan!"); closePopup('formPopup'); fetchData(); }
+      } catch (err) { showToast("Kesalahan koneksi.", "error"); }
+    };
+
+    async function deleteLomba(id) {
+      if(confirm('Hapus lomba ini?')) { 
+        try {
+          const res = await fetch(`${API_URL}/${id}`, { 
+              method: 'DELETE',
+              headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          }); 
+          if(res.ok) { showToast("Lomba berhasil dihapus!"); fetchData(); }
+        } catch (err) { showToast("Gagal menghapus.", "error"); }
+      }
+    }
+
+    function editLomba(id) {
+      const item = lombaData.find(l => l._id === id);
+      document.getElementById('editId').value = item._id;
+      document.getElementById('fJudul').value = item.judul;
+      document.getElementById('fKategoriPeserta').value = item.kategoriPeserta.join(', ');
+      document.getElementById('fKategoriLomba').value = item.kategoriLomba;
+      document.getElementById('fDeskSingkat').value = item.deskripsiSingkat;
+      document.getElementById('fDeskLengkap').value = item.deskripsiLengkap;
+      document.getElementById('fBiaya').value = item.biaya;
+      document.getElementById('fTglMulai').value = item.tanggalMulai.split('T')[0];
+      document.getElementById('fTglSelesai').value = item.tanggalSelesai.split('T')[0];
+      document.getElementById('fTempat').value = item.tempat;
+      document.getElementById('fPenyelenggara').value = item.penyelenggara;
+      document.getElementById('fLink').value = item.linkDaftar;
+      document.getElementById('formTitle').innerText = "Edit Info Lomba";
+      document.getElementById('formPopup').style.display = 'flex';
+    }
+
+    function renderPagination(total, page) {
+      const p = document.getElementById('pagination'); p.innerHTML = '';
+      if(total <= 1) return;
+      for (let i = 1; i <= total; i++) {
+        const b = document.createElement('button');
+        b.innerText = i;
+        b.style.cssText = `padding: 10px 18px; border-radius: 12px; border: 1px solid ${i===page ? 'var(--primary)' : '#e2e8f0'}; background: ${i===page ? 'var(--primary)' : 'white'}; color: ${i===page ? 'white' : 'var(--text-dark)'}; cursor: pointer; font-weight: bold; transition: 0.2s;`;
+        b.onclick = () => { renderLomba(i); window.scrollTo({top:0, behavior:'smooth'}); };
+        p.appendChild(b);
+      }
+    }
+
+    function openForm() { document.getElementById('lombaForm').reset(); document.getElementById('editId').value=''; document.getElementById('formTitle').innerText = "Tambah Info Lomba"; document.getElementById('formPopup').style.display='flex'; }
+    function closePopup(id) { document.getElementById(id).style.display = 'none'; }
+    window.onclick = (e) => { if (e.target.classList.contains('popup')) { closePopup('formPopup'); closePopup('detailPopup'); } }
+
+    window.onload = async () => {
+        await loadLayout();
+        fetchData();
+    };
+  </script>
+</body>
+</html>

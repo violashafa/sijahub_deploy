@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #0891b2;           
+    --primary-dark: #0e7490;
+    --primary-light: #06b6d4;
+    --bg-body: #f8fafc;           
+    --text-main: #0f172a;         
+    --text-body: #334155;          
+    --text-muted: #64748b;
+    --white: #ffffff;
+    --shadow: 0 4px 15px rgba(8, 145, 178, 0.1);
+    --shadow-hover: 0 8px 25px rgba(8, 145, 178, 0.2);
+    --radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out; 
+}
+
+body {
+    margin: 0;
+    /* PENTING: Jarak ini supaya konten tidak naik ke bawah navbar */
+    padding-top: 80px; 
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-body);
+    line-height: 1.6;
+}
+
+/* Tambahkan ini juga agar padding section konsisten */
+.section {
+    padding: 40px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+
+
+h1, h2, h3, h4 {
+    color: var(--primary);
+    margin-top: 0;
+    font-weight: 800; 
+    letter-spacing: -0.5px;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    color: var(--primary-dark);
+    font-size: 2rem;
+}
+
+h3 {
+    color: var(--text-main);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+p {
+    color: var(--primary);
+    font-size: 1rem;
+    line-height: 1.7;
+    font-weight: 400;
+}
+
+.Credit, .Alamat-Kami, .Tentang-sija {
+    color: var(--white);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.kelas {
+    color: var(--text-main);
+    font-size: 1rem;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+/* Link Default */
+a {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* Tombol Standar SICONNECT*/
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-block;
+    box-shadow: var(--shadow);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-secondary {
+    background-color: var(--white);
+    color: var(--primary);
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    border: 2px solid var(--primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.card-base {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(8, 145, 178, 0.1);
+}
+
+
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--white);
+}
+
+
+.text-center { text-align: center; }
+.mt-4 { margin-top: 2rem; }
+.mb-4 { margin-bottom: 2rem; }

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SiConnect - Beranda</title>
+
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/beranda.css">
+  <link rel="stylesheet" href="../css/berita-beranda.css">
+</head>
+<body>
+
+  <div id="header"></div>
+
+  <!-- ===== 1. HERO — Welcome + Apa itu SiConnect (box putih + logo) ===== -->
+  <main class="hero-section section">
+
+    <div class="hero-top">
+      <h1>Welcome To SiConnect</h1>
+    </div>
+
+    <div class="siconnect-box">
+      <div class="siconnect-text">
+        <h2>Apa itu SiConnect?</h2>
+        <p>
+          SiConnect adalah platform digital yang dibuat khusus untuk jurusan
+          Sistem Informasi Jaringan dan Aplikasi (SIJA) sebagai media informasi,
+          dokumentasi, dan konektivitas antara siswa, alumni, dan jurusan.
+        </p>
+        <p>
+          Melalui SiConnect, pengguna dapat mengakses data siswa, prestasi,
+          informasi lomba, peluang kerja, serta perkembangan alumni sebagai
+          bentuk kolaborasi dan inspirasi berkelanjutan.
+        </p>
+      </div>
+      <div class="siconnect-image">
+        <img src="../assets/LOGO_SICONNECT_2-removebg.png" alt="Logo SiConnect">
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== 2. APA ITU SIJA + VISI MISI + VIDEO ===== -->
+  <section class="container section">
+
+    <div class="content-left">
+      <h2>Apa itu SIJA?</h2>
+      <p>
+        SIJA merupakan singkatan dari Sistem Informasi Jaringan dan Aplikasi,
+        sebuah program keahlian di bawah Bidang Keahlian Teknologi Informasi
+        yang fokus pada pemrograman, pengembangan aplikasi, dan pengelolaan
+        jaringan komputer.
+      </p>
+
+      <div class="visi-misi">
+        <div class="visi">
+          <h2>Visi</h2>
+          <p>
+            Terwujudnya sekolah dengan lulusan yang unggul dan berakhlaq mulia,
+            berbudaya kerja, berjiwa technopreneurship serta berwawasan global.
+          </p>
+        </div>
+        <div class="misi">
+          <h2>Misi</h2>
+          <ol>
+            <li>Menciptakan lulusan yang kompeten di bidang IT.</li>
+            <li>Membekali siswa dengan ilmu teknologi terbaru.</li>
+            <li>Mendidik siswa agar inovatif dan siap industri digital.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-right">
+      <div class="box">
+        <iframe
+          src="https://www.youtube.com/embed/geiTc__xBnU"
+          title="YouTube video player"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== 3. MAPEL KEJURUAN ===== -->
+  <section class="mapel-section section">
+    <h2>Pembelajaran Kejuruan SIJA</h2>
+    <p class="mapel-desc">
+      Mata pelajaran kejuruan SIJA dirancang untuk membekali siswa dengan
+      keterampilan teknis, logika pemrograman, serta kesiapan menghadapi dunia industri digital.
+    </p>
+    <div class="mapel-grid">
+      <div class="mapel-card">Komputer dan Jaringan Dasar</div>
+      <div class="mapel-card">Pemrograman Dasar</div>
+      <div class="mapel-card">Desain Grafis</div>
+      <div class="mapel-card">Infrastructure as a Service (IaaS)</div>
+      <div class="mapel-card">Platform as a Service (PaaS)</div>
+      <div class="mapel-card">Software as a Service (SaaS)</div>
+      <div class="mapel-card">Sistem Internet of Things (SIoT)</div>
+      <div class="mapel-card">Sistem Keamanan Jaringan</div>
+      <div class="mapel-card">Produk Kreatif dan Kewirausahaan</div>
+    </div>
+  </section>
+
+  <!-- ===== 4. SLIDER ABOUT SIJA ===== -->
+  <section class="berita-section">
+
+    <div class="section-title-container">
+      <h2>About SIJA</h2>
+      <div class="section-title-line"></div>
+    </div>
+
+    <div class="slider-container">
+      <button class="arrow-btn prev" aria-label="Sebelumnya">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+
+      <div class="slider-box">
+        <div class="slider-viewport">
+          <div class="slider-track" id="sliderTrack">
+
+            <div class="news-card">
+              <img class="card-image" src="../assets/kojur.jpg" alt="Kepala Jurusan"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="card-img-placeholder" style="background: linear-gradient(135deg, #6a5acd, #9370db, #7b68ee); display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.3">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+              </div>
+              <div class="card-label">
+                <div class="label-line"></div>
+                <span>Our Leader</span>
+              </div>
+            </div>
+
+            <div class="news-card">
+              <img class="card-image" src="../assets/kojur&wakojur.jpg" alt="Kepala & Wakil Jurusan"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="card-img-placeholder" style="background: linear-gradient(135deg, #7b68ee, #9370db, #6a5acd); display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.3">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="card-label">
+                <div class="label-line"></div>
+                <span>Our Leader</span>
+              </div>
+            </div>
+
+            <div class="news-card">
+              <img class="card-image" src="../assets/wakojur.jpg" alt="Wakil Kepala Jurusan"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="card-img-placeholder" style="background: linear-gradient(135deg, #7b68ee, #9370db, #6a5acd); display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.3">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="card-label">
+                <div class="label-line"></div>
+                <span>Our Leader</span>
+              </div>
+            </div>
+
+            <div class="news-card">
+              <img class="card-image" src="../assets/netfusion.jpg" alt="NetFusion Event"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="card-img-placeholder" style="background: linear-gradient(135deg, #7b68ee, #9370db, #6a5acd); display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.3">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="card-label">
+                <div class="label-line"></div>
+                <span>Event</span>
+              </div>
+            </div>
+
+            <div class="news-card">
+              <img class="card-image" src="../assets/networkadventure.jpg" alt="Network Adventure Event"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="card-img-placeholder" style="background: linear-gradient(135deg, #7b68ee, #9370db, #6a5acd); display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.3">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="card-label">
+                <div class="label-line"></div>
+                <span>Event</span>
+              </div>
+            </div>
+
+            <div class="news-card">
+              <img class="card-image" src="../assets/sijajuara.jpg" alt="SIJA Juara"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="card-img-placeholder" style="background: linear-gradient(135deg, #7b68ee, #9370db, #6a5acd); display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.3">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="card-label">
+                <div class="label-line"></div>
+                <span>Achievement</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <button class="arrow-btn next" aria-label="Selanjutnya">
+        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+    </div>
+
+    <div class="dots" id="dots"></div>
+
+  </section>
+
+  <!-- ===== 5. TEAM / SISWA ===== -->
+  <section class="siswa-section section">
+    <div id="particles-js"></div>
+
+    <div class="siswa-card">
+      <div class="foto-wrapper">
+        <div class="foto-jajang"><img src="../assets/paldo2.png" alt="Rivaldi"></div>
+      </div>
+      <h3>Rivaldi Fadilah I</h3>
+      <p class="kelas">50 A</p>
+    </div>
+
+    <div class="siswa-card">
+      <div class="foto-wrapper">
+        <div class="foto-jajang"><img src="../assets/viola3.png" alt="Viola"></div>
+      </div>
+      <h3>Viola Shafa M</h3>
+      <p class="kelas">50 A</p>
+    </div>
+
+    <div class="siswa-card">
+      <div class="foto-wrapper">
+        <div class="foto-jajang"><img src="../assets/jek2.png" alt="Zakky"></div>
+      </div>
+      <h3>Zakky Fadhlur R</h3>
+      <p class="kelas">50 A</p>
+    </div>
+  </section>
+
+  <div id="footer"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="../js/header.js"></script>
+  <script src="../js/berita-beranda.js"></script>
+
+  <script>
+    async function init() {
+      try {
+        const hRes = await fetch('../components/header.html');
+        document.getElementById('header').innerHTML = await hRes.text();
+
+        const fRes = await fetch('../components/footer.html');
+        document.getElementById('footer').innerHTML = await fRes.text();
+
+        setTimeout(() => {
+          if (typeof updateNavbarByRole === 'function') {
+            updateNavbarByRole();
+          }
+        }, 50);
+      } catch (err) {
+        console.error('Gagal memuat komponen:', err);
+      }
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section, .siswa-card').forEach(el => observer.observe(el));
+
+    // Particles.js
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 55, density: { enable: true, value_area: 900 } },
+        color: { value: '#1f6fb2' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.7 },
+        size: { value: 3, random: true },
+        line_linked: {
+          enable: true,
+          distance: 130,
+          color: '#1f6fb2',
+          opacity: 0.55,
+          width: 1
+        },
+        move: { enable: true, speed: 0.9 }
+      },
+      interactivity: {
+        events: { onhover: { enable: true, mode: 'grab' } },
+        modes: { grab: { distance: 160, line_linked: { opacity: 0.8 } } }
+      },
+      retina_detect: true
+    });
+
+    init();
+  </script>
+
+</body>
+</html>

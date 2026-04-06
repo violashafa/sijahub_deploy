@@ -1,0 +1,83 @@
+.navbar {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    padding: 15px 50px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-container {
+    display: flex; justify-content: space-between;
+    align-items: center; max-width: 1400px; margin: 0 auto;
+}
+
+.logo-section { display: flex; align-items: center; gap: 15px; }
+.icon { width: 45px; height: 45px; border-radius: 50%; overflow: hidden; border: 2px solid white; }
+.icon img { width: 100%; height: 100%; object-fit: cover; }
+.logo { font-size: 24px; font-weight: 700; color: white; }
+
+/* Menu Utama */
+.menu { display: flex; gap: 10px; align-items: center; }
+.menu a {
+    color: white; text-decoration: none; font-size: 14px;
+    padding: 8px 15px; border-radius: 8px; transition: 0.3s;
+}
+.menu a:hover { background: rgba(255, 255, 255, 0.15); }
+.menu a.active { background: rgba(0, 0, 0, 0.2); font-weight: 600; }
+
+/* Tombol Hamburger */
+.hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: none; cursor: pointer; z-index: 1001;
+}
+.hamburger span { display: block; width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; }
+
+/* Overlay */
+.header-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.4); z-index: 998;
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 992px) {
+    .navbar { padding: 10px 20px; }
+    .hamburger { display: flex; }
+
+    .menu {
+        position: fixed;
+        top: 75px; right: -100%;
+        width: 250px;
+        height: auto; /* Box menyesuaikan konten */
+        background: #138496;
+        flex-direction: column;
+        padding: 15px;
+        border-radius: 12px 0 0 12px;
+        transition: 0.4s ease;
+        box-shadow: -5px 5px 15px rgba(0,0,0,0.2);
+        z-index: 999;
+    }
+
+    .menu.active { right: 0; }
+    .header-overlay.active { display: block; }
+
+    /* PAKSA PROFILE KE ATAS DI MOBILE */
+    .profile-link {
+        order: -1; 
+        width: 100%;
+        margin-bottom: 10px;
+        background: rgba(0,0,0,0.1);
+    }
+
+    .menu a { width: 100%; text-align: left; }
+    
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+}
+
+/* Styling Badge & Button */
+.user-badge { padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold; }
+.admin-badge { background: #e67e22; color: white; }
+.user-info-badge { background: #fff; color: #138496; }
+.logout-btn { color: #ffb3b3 !important; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px !important; margin-top: 5px; }

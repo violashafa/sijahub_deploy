@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SijaHub - Direktori Siswa</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+    <style>
+        :root {
+            --primary: #0aa3b5;
+            --secondary: #0891b2;
+            --bg-light: #f8fafc;
+        }
+
+        .container { padding: 40px 20px; min-height: 80vh; max-width: 1200px; margin: auto; }
+        
+        /* Statistik Card */
+        .stats-row { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .stat-card { 
+            background: #fff; 
+            padding: 15px 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Filter Modern */
+        .filters { 
+            display: flex; gap: 12px; background: #fff; 
+            padding: 20px; border-radius: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; 
+            align-items: center; margin-bottom: 30px;
+        }
+        .filters input, .filters select { 
+            padding: 12px 15px; border-radius: 12px; 
+            border: 1px solid #eee; outline: none; flex: 1; min-width: 150px;
+            transition: 0.3s;
+        }
+        .filters input:focus { border-color: var(--primary); }
+        
+        /* Grid Kartu Siswa */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+        .student-card { 
+            background: #fff; border-radius: 25px; 
+            padding: 30px 20px; text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s ease;
+            cursor: pointer; border-bottom: 4px solid transparent;
+        }
+        .student-card:hover { transform: translateY(-10px); border-bottom: 4px solid var(--primary); }
+        
+        .avatar { 
+            width: 110px; height: 110px; border-radius: 50%; 
+            object-fit: cover; margin-bottom: 15px; 
+            border: 3px solid #f0fbfc; background: #eee; 
+        }
+        
+        .status-badge { 
+            font-size: 10px; font-weight: 800; padding: 5px 12px; 
+            border-radius: 30px; text-transform: uppercase; 
+            display: inline-block; margin-bottom: 10px; 
+        }
+        
+        /* Popup Detail - Tema Terang */
+        .popup { 
+            display: none; position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); 
+            z-index: 10000; justify-content: center; align-items: center; 
+        }
+        .popup-content { 
+            background: #fff; padding: 40px; border-radius: 30px; 
+            max-width: 450px; width: 90%; position: relative; text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .close { position: absolute; top: 20px; right: 25px; font-size: 28px; cursor: pointer; color: #ccc; }
+        .close:hover { color: var(--primary); }
+        
+        /* Pagination */
+        #pagination { display: flex; justify-content: center; gap: 8px; margin: 40px 0; }
+        .pagination-btn { padding: 10px 18px; border-radius: 10px; border: none; background: #eee; color: #333; cursor: pointer; font-weight: 600; }
+        .pagination-btn.active { background: var(--primary); color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title" style="color: var(--primary); font-size: 32px; font-weight: 800;">Direktori Siswa</h1>
+            <p style="color: #666; margin-bottom: 25px;">Temukan profil teman seangkatan dan alumni SijaHub.</p>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <span style="color: #666; font-size: 14px;">Siswa Aktif</span>
+                <h4 id="countSiswa" style="margin: 5px 0 0; font-size: 24px; color: var(--primary);">0</h4>
+            </div>
+            <div class="stat-card">
+                <span style="color: #666; font-size: 14px;">Alumni</span>
+                <h4 id="countAlumni" style="margin: 5px 0 0; font-size: 24px; color: #ff9800;">0</h4>
+            </div>
+            <div class="stat-card">
+                <span style="color: #666; font-size: 14px;">Total Terdata</span>
+                <h4 id="countTotal" style="margin: 5px 0 0; font-size: 24px; color: #333;">0</h4>
+            </div>
+        </div>
+
+        <div class="filters">
+            <input type="text" id="searchName" placeholder="Cari nama..." />
+            <select id="filterStatus">
+                <option value="">Semua Status</option>
+                <option value="siswa">Siswa Aktif</option>
+                <option value="alumni">Alumni</option>
+            </select>
+            <select id="filterAngkatan">
+                <option value="">Semua Angkatan</option>
+            </select>
+            <select id="filterKelas">
+                <option value="">Semua Kelas</option>
+            </select>
+        </div>
+
+        <div id="cardGrid" class="card-grid"></div>
+        <div id="pagination"></div>
+    </main>
+
+    <div id="footer"></div>
+
+    <div id="detailPopup" class="popup">
+        <div class="popup-content">
+            <span id="closePopup" class="close">&times;</span>
+            <img id="popupFoto" class="avatar" src="" style="width: 130px; height: 130px; border: 4px solid var(--primary);" />
+            <h2 id="popupNama" style="color: var(--primary); margin-bottom: 20px;"></h2>
+            <div id="extraInfo" style="text-align: left; background: #f8fafc; padding: 20px; border-radius: 20px; font-size: 14px; line-height: 2; border: 1px solid #edf2f7;"></div>
+        </div>
+    </div>
+
+    <script src="../js/header.js"></script>
+
+    <script>
+        const API_URL = 'https://localhost:5000/api/students';
+        let allStudents = []; 
+        let currentPage = 1;
+        const limit = 12;
+
+        async function initializeApp() {
+            try {
+                // Load Header & Footer
+                const [hRes, fRes] = await Promise.all([
+                    fetch('../components/header.html').catch(() => null),
+                    fetch('../components/footer.html').catch(() => null)
+                ]);
+
+                if(hRes && hRes.ok) document.getElementById('header').innerHTML = await hRes.text();
+                if(fRes && fRes.ok) document.getElementById('footer').innerHTML = await fRes.text();
+
+                // Fungsi opsional jika ada role-based navbar
+                if (typeof updateNavbarByRole === "function") updateNavbarByRole();
+
+                await fetchStudents();
+            } catch (err) {
+                console.error("Inisialisasi gagal:", err);
+            }
+        }
+
+        async function fetchStudents(page = 1) {
+            try {
+                const res = await fetch(`${API_URL}?page=${page}&limit=${limit}`);
+                const result = await res.json();
+                
+                if (result.success && result.data) {
+                    allStudents = result.data.data || [];
+                    currentPage = result.data.currentPage || 1;
+                    
+                    // Update statistik dari totalData backend
+                    updateStats(result.data.totalData || allStudents.length);
+                    renderFilters();
+                    renderCards(allStudents);
+                    renderPagination(result.data.totalPage || 1);
+                }
+            } catch (err) {
+                document.getElementById('cardGrid').innerHTML = "<p>Gagal memuat data dari server.</p>";
+            }
+        }
+
+        function updateStats(total) {
+            document.getElementById('countTotal').innerText = total;
+            // Menghitung jumlah dari data yang sedang dimuat (atau bisa dari API khusus statistik)
+            const countSiswa = allStudents.filter(s => s.status === 'siswa').length;
+            const countAlumni = allStudents.filter(s => s.status === 'alumni').length;
+            
+            document.getElementById('countSiswa').innerText = countSiswa + (total > limit ? "+" : "");
+            document.getElementById('countAlumni').innerText = countAlumni + (total > limit ? "+" : "");
+        }
+
+        function renderFilters() {
+            const angSelect = document.getElementById('filterAngkatan');
+            const kelSelect = document.getElementById('filterKelas');
+            
+            const listAng = [...new Set(allStudents.map(s => s.angkatan))].sort();
+            const listKel = [...new Set(allStudents.map(s => s.kelas))].sort();
+            
+            const oldAng = angSelect.value;
+            const oldKel = kelSelect.value;
+
+            angSelect.innerHTML = '<option value="">Semua Angkatan</option>' + 
+                listAng.map(a => `<option value="${a}" ${a==oldAng?'selected':''}>Angkatan ${a}</option>`).join('');
+            kelSelect.innerHTML = '<option value="">Semua Kelas</option>' + 
+                listKel.map(k => `<option value="${k}" ${k==oldKel?'selected':''}>${k}</option>`).join('');
+        }
+
+        function renderCards(data) {
+            const grid = document.getElementById('cardGrid');
+            // PERUBAHAN: s.foto sekarang berisi URL Cloudinary penuh, tidak perlu ditambah http://localhost...
+            grid.innerHTML = data.length ? data.map(s => {
+                const isAlumni = s.status === 'alumni';
+                const color = isAlumni ? '#ff9800' : '#0aa3b5';
+                const fotoUrl = s.foto || 'https://via.placeholder.com/110?text=No+Image';
+                
+                return `
+                <div class="student-card" onclick='showDetail(${JSON.stringify(s)})'>
+                    <img src="${fotoUrl}" class="avatar">
+                    <br>
+                    <span class="status-badge" style="background: ${color}15; color: ${color}; border: 1px solid ${color}40;">
+                        ${isAlumni ? 'Alumni' : 'Siswa Aktif'}
+                    </span>
+                    <h3 style="margin: 10px 0 5px; color: #333;">${s.namaLengkap}</h3>
+                    <p style="color: #777; font-size: 14px; margin: 0;">${s.kelas} • Angkatan ${s.angkatan}</p>
+                </div>
+                `}).join('') : '<div style="grid-column:1/-1; text-align:center;"><p>Siswa tidak ditemukan.</p></div>';
+        }
+
+        function showDetail(s) {
+            const fotoUrl = s.foto || 'https://via.placeholder.com/130?text=No+Image';
+            document.getElementById('popupFoto').src = fotoUrl;
+            document.getElementById('popupNama').innerText = s.namaLengkap;
+            document.getElementById('extraInfo').innerHTML = `
+                <p><b>Status:</b> ${s.status === 'alumni' ? 'Alumni' : 'Siswa Aktif'}</p>
+                <p><b>Kelas:</b> ${s.kelas}</p>
+                <p><b>Angkatan:</b> ${s.angkatan}</p>
+                ${s.status === 'alumni' ? `<p><b>Tahun Lulus:</b> ${s.tahunLulus || '-'}</p>` : ''}
+                <p><b>Aktivitas:</b> ${s.aktivitas || '-'}</p>
+                <p><b>Instansi:</b> ${s.instansi || '-'}</p>
+                <p><b>Instagram:</b> ${s.mediaSosial?.instagram ? '<a href="https://instagram.com/'+s.mediaSosial.instagram+'" target="_blank" style="color:var(--primary); text-decoration:none;">@' + s.mediaSosial.instagram + '</a>' : '-'}</p>
+            `;
+            document.getElementById('detailPopup').style.display = 'flex';
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('searchName').value.toLowerCase();
+            const status = document.getElementById('filterStatus').value;
+            const ang = document.getElementById('filterAngkatan').value;
+            const kel = document.getElementById('filterKelas').value;
+
+            const filtered = allStudents.filter(s => {
+                const mNama = s.namaLengkap.toLowerCase().includes(search);
+                const mStatus = status === "" || s.status === status;
+                const mAng = ang === "" || s.angkatan.toString() === ang;
+                const mKel = kel === "" || s.kelas === kel;
+                return mNama && mStatus && mAng && mKel;
+            });
+            renderCards(filtered);
+        }
+
+        function renderPagination(total) {
+            const p = document.getElementById('pagination');
+            p.innerHTML = '';
+            if(total <= 1) return;
+            for(let i=1; i<=total; i++) {
+                const btn = document.createElement('button');
+                btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => fetchStudents(i);
+                p.appendChild(btn);
+            }
+        }
+
+        // Listeners
+        document.getElementById('searchName').addEventListener('input', applyFilters);
+        document.getElementById('filterStatus').addEventListener('change', applyFilters);
+        document.getElementById('filterAngkatan').addEventListener('change', applyFilters);
+        document.getElementById('filterKelas').addEventListener('change', applyFilters);
+        document.getElementById('closePopup').onclick = () => document.getElementById('detailPopup').style.display = 'none';
+        
+        window.onclick = (e) => { 
+            if(e.target.id === 'detailPopup') document.getElementById('detailPopup').style.display = 'none'; 
+        };
+
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>
