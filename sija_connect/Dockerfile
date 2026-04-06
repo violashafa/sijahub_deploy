@@ -10,4 +10,4 @@ RUN npm install --production
 COPY . .
 
 # Beritahu Docker bahwa file utamamu ada di dalam sub-folder backend/src/
-CMD ["node", "backend/src/app.js"]
+CMD ["node", "server.js"]
