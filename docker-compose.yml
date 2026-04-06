@@ -11,7 +11,7 @@ services:
     depends_on:
       - sijahub-backend
 
-  sijahub-backend:
+sijahub-backend:
     build: ./sija_connect
     container_name: sijahub-api
     restart: always
