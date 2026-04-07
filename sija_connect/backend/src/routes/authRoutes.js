@@ -21,7 +21,7 @@ const validateLogin = [
 ];
 
 // API REGISTER
-router.post('/register', validateRegister, async (req, res) => {
+router.post('/register', validateRegister, async (req, res, next) => { 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ success: false, errors: errors.array() });
@@ -39,14 +39,14 @@ router.post('/register', validateRegister, async (req, res) => {
         user = new User({ firstname, lastname, email, password, role: userRole });
         await user.save(); 
 
-        res.status(201).json({ message: `Berhasil Daftar sebagai ${userRole}!` });
+        res.status(201).json({ success: true, message: `Berhasil Daftar sebagai ${userRole}!` });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err); 
     }
 });
 
-// API LOGIN (SUDAH DI-FIX AGAR FOTO TIDAK HILANG)
-router.post('/login', validateLogin, async (req, res) => {
+// API LOGIN
+router.post('/login', validateLogin, async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ success: false, errors: errors.array() });
@@ -75,33 +75,32 @@ router.post('/login', validateLogin, async (req, res) => {
                 id: user._id, 
                 firstname: user.firstname, 
                 role: user.role,
-                avatar: user.avatar || "" // <--- SEKARANG AVATAR DIKIRIM SAAT LOGIN
+                avatar: user.avatar || "" 
             } 
         });
     } catch (err) {
-        res.status(500).json({ message: "Error Server: " + err.message });
+        next(err);
     }
 });
 
 // API GET PROFILE
-router.get('/profile', verifyToken, async (req, res) => {
+router.get('/profile', verifyToken, async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
         res.json({ success: true, data: user });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 });
 
 // API UPDATE PROFILE
-router.put('/update-profile', verifyToken, uploadToCloud('profiles').single('avatar'), async (req, res) => {
+router.put('/update-profile', verifyToken, uploadToCloud('profiles').single('avatar'), async (req, res, next) => {
     try {
         const { firstname, lastname, email, oldPassword, newPassword } = req.body;
         const user = await User.findById(req.user.id);
 
         if (!user) return res.status(404).json({ message: "User tidak ditemukan" });
 
-        // LOGIKA GANTI PASSWORD
         if (newPassword && newPassword.trim() !== "") {
             if (!oldPassword) {
                 return res.status(400).json({ message: "Masukkan password lama untuk mengganti password baru!" });
@@ -113,7 +112,6 @@ router.put('/update-profile', verifyToken, uploadToCloud('profiles').single('ava
             user.password = newPassword; 
         }
 
-        // Update Field lainnya
         if (firstname) user.firstname = firstname;
         if (lastname) user.lastname = lastname;
         if (email) user.email = email;
@@ -130,7 +128,7 @@ router.put('/update-profile', verifyToken, uploadToCloud('profiles').single('ava
             } 
         });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 });
 
