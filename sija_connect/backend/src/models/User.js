@@ -10,12 +10,24 @@ const UserSchema = new mongoose.Schema({
     avatar: { type: String, default: '' } 
 });
 
-// Middleware: Sebelum simpan, acak password (Hashing)
+// Middleware: Hashing Password dengan Try-Catch agar Error terdeteksi
 UserSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) return next();
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
+    // 1. Jika password tidak diubah, langsung lanjut
+    if (!this.isModified('password')) {
+        return next();
+    }
+
+    try {
+        // 2. Proses Hashing
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        
+        // 3. Panggil next() tanpa argumen jika sukses
+        next();
+    } catch (err) {
+        // 4. Kirim error ke errorHandler jika gagal
+        next(err);
+    }
 });
 
 module.exports = mongoose.model('User', UserSchema);
